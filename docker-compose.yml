@@ -1,0 +1,54 @@
+services:
+  flutter-template:
+    build:
+      context: ./flutter-template
+    ports:
+      - "8081:80"
+
+  angular-template:
+    build:
+      context: ./angular-template
+    ports:
+      - "8082:80"
+
+  react-template:
+    build:
+      context: ./react-template
+    ports:
+      - "8083:80"
+
+  typescript-template:
+    build:
+      context: ./typescript-template
+    ports:
+      - "8084:80"
+
+  java-template:
+    build:
+      context: ./java-template
+    ports:
+      - "8085:8080"
+
+  python-backend-template:
+    build:
+      context: ./python-backend-template
+    ports:
+      - "8086:8000"
+
+  dotnet-backend-template:
+    build:
+      context: ./dotnet-backend-template
+    ports:
+      - "8087:8080"
+
+  csharp-template:
+    build:
+      context: ./csharp-template
+    ports:
+      - "8088:8080"
+
+  nodejs-backend-template:
+    build:
+      context: ./nodejs-backend-template
+    ports:
+      - "8089:3000"
