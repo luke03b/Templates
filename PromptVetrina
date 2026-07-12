@@ -1,0 +1,40 @@
+> **Ruolo e Contesto**
+> Sei un Senior Full-Stack Developer e un AI Agent istruito secondo le linee guida e gli stili di programmazione definiti nella mia repository (fai riferimento in particolare alle `frontend-guidelines` e alle guideline specifiche del framework scelto).
+> 
+> 
+> **Obiettivo**
+> Genera il codice per una landing page/sito vetrina per un [INSERIRE TIPO DI LOCALE: Pizzeria / Ristorante / Bar].
+> Utilizza il template [INSERIRE FRAMEWORK FRONTEND: es. React, Angular, TypeScript] per il frontend e il template [INSERIRE FRAMEWORK BACKEND: es. Nodejs, Python, C#] per il backend, includendo l'endpoint health di default.
+> 
+> 
+> **Requisiti di Design (Stile e UI)**
+> * **Stile Generale:** Il design deve essere semplice, elegante, moderno e minimale. Deve essere rigorosamente "mobile-first" e perfettamente responsive su tutti i dispositivi.
+> * **Palette Colori:** Utilizza esclusivamente una palette scura elegante basata sul nero. Lo sfondo principale deve essere nero scuro (es. `#0b0b0b` o `#000000`) con testi in contrasto in bianco sporco o grigio chiaro (es. `#f4f4f4`, `#cccccc`). Scegli un singolo colore di accento sobrio (es. un rosso mattone per una pizzeria, o un oro/sabbia per un ristorante di classe) per le call to action e gli elementi interattivi.
+> * **Cosa EVITARE tassativamente:** Vietato l'uso dei classici "cliché da intelligenza artificiale". Non utilizzare alcun tipo di gradiente, niente colori fluorescenti o neon, niente ombreggiature glow o animazioni eccessive. Mantieni un design "flat" o con ombreggiature scurissime e impercettibili per separare i livelli.
+> 
+> 
+> **Architettura e Manutenibilità del Codice**
+> * **Astrazione e Configurazione:** Sviluppa il codice con una forte logica di astrazione. Nessun colore, font o stringa di testo importante deve essere "hardcoded" nei singoli componenti.
+> * **Variabili Globali:** Definisci una root o un file di configurazione univoco per i token di design (es. variabili CSS come `--bg-main`, `--text-primary`, `--accent-color` oppure un Theme Provider se usi un CSS-in-JS). Per modificare la palette del sito in futuro, dovrà essere sufficiente cambiare i valori in quest'unico file.
+> * **Struttura Dati:** Estrai i dati del locale (nome, menu, orari, contatti, link social) in un file di configurazione separato (es. `config.json` o un file `data.ts/js`) in modo che la manutenzione e l'aggiornamento dei contenuti non richiedano di toccare il markup della UI.
+> 
+> 
+> **Struttura della Landing Page**
+> La pagina deve essere composta dalle seguenti sezioni:
+> 1. **Header/Navbar:** Semplice, sticky, con il nome del locale e i link alle sezioni.
+> 2. **Hero Section:** Un titolo d'impatto, una breve descrizione dell'atmosfera del locale e una chiara Call to Action (es. "Prenota un tavolo" o "Guarda il menu").
+> 3. **Sezione Chi Siamo:** Breve paragrafo sulla filosofia del locale.
+> 4. **Menu in evidenza:** Una griglia o lista testuale semplice (recuperata dal file dati) con 4-6 piatti/drink iconici e i relativi prezzi.
+> 5. **Contatti e Footer:** Indirizzo, orari di apertura, numero di telefono, e uno status indicator minimale che fa una fetch all'endpoint "health" del backend per mostrare un piccolo pallino verde con scritto "Sistema Online" (dimostrazione tecnica di collegamento).
+> 
+> 
+> 
+> 
+> **Output Richiesto**
+> * Fornisci il codice ben strutturato e commentato seguendo lo standard definito nelle mie `.agents/skills`.
+> 
+> 
+> * Mostra il file della gestione variabili (CSS o Theme).
+> * Mostra il file di astrazione dei dati (`data.ts` o simile).
+> * Mostra i componenti principali della UI.
+> * Mostra la chiamata API verso l'endpoint health del backend prescelto.
