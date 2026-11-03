@@ -1,0 +1,25 @@
+// Stili della lista items.
+.table-wrapper {
+  overflow-x: auto;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--app-radius-md);
+}
+
+table {
+  width: 100%;
+  min-width: 640px;
+}
+
+.description {
+  max-width: 320px;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.numeric {
+  text-align: right;
+}
+
+.actions {
+  white-space: nowrap;
+  text-align: right;
+}

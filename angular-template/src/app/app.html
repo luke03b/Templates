@@ -1,0 +1,50 @@
+<mat-toolbar class="toolbar">
+  <a class="brand" routerLink="/">
+    <mat-icon aria-hidden="true">deployed_code</mat-icon>
+    <span>Angular Template</span>
+  </a>
+
+  <!-- Navigazione desktop: nascosta sotto i 768px (vedi app.scss). -->
+  <nav class="desktop-nav" aria-label="Main navigation">
+    @for (link of navLinks; track link.path) {
+      <a
+        matButton
+        [routerLink]="link.path"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: link.exact }"
+        ariaCurrentWhenActive="page"
+      >
+        {{ link.label }}
+      </a>
+    }
+  </nav>
+
+  <span class="spacer"></span>
+  <app-status-indicator class="status" [status]="backendStatus.status()" />
+
+  <!-- Navigazione mobile: un menu a tendina, visibile solo sotto i 768px. -->
+  <button
+    matIconButton
+    class="mobile-menu-button"
+    [matMenuTriggerFor]="mobileMenu"
+    aria-label="Open navigation menu"
+  >
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #mobileMenu="matMenu" xPosition="before">
+    @for (link of navLinks; track link.path) {
+      <a mat-menu-item [routerLink]="link.path">
+        <mat-icon>{{ link.icon }}</mat-icon>
+        <span>{{ link.label }}</span>
+      </a>
+    }
+  </mat-menu>
+</mat-toolbar>
+
+<main class="content">
+  <router-outlet />
+</main>
+
+<footer class="footer app-text-muted">
+  <span>&copy; {{ year }} Angular Template</span>
+</footer>

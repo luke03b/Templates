@@ -1,0 +1,9 @@
+// Stili del form item.
+:host {
+  display: block;
+  max-width: 640px;
+}
+
+.actions {
+  justify-content: flex-end;
+}

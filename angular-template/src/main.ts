@@ -1,9 +1,7 @@
+// Punto di ingresso: avvia l'app standalone con la configurazione definita in app.config.ts.
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
 
-import { appRoutes } from './app/app.routes';
-import { AppComponent } from './app/app.component';
+import { App } from './app/app';
+import { appConfig } from './app/app.config';
 
-bootstrapApplication(AppComponent, {
-  providers: [provideRouter(appRoutes)],
-}).catch((error) => console.error(error));
+bootstrapApplication(App, appConfig).catch((err: unknown) => console.error(err));

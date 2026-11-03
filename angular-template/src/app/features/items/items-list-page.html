@@ -1,0 +1,82 @@
+<div class="app-container">
+  <app-page-header title="Items" subtitle="CRUD example against /api/items">
+    <button matIconButton matTooltip="Reload" aria-label="Reload items" (click)="reload()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <a matButton="filled" routerLink="new">
+      <mat-icon>add</mat-icon>
+      New item
+    </a>
+  </app-page-header>
+
+  @if (store.loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading items" />
+  }
+
+  @if (store.error(); as error) {
+    <app-alert kind="error" title="Unable to load items">
+      {{ error }}
+      <button alertActions matButton (click)="reload()">Retry</button>
+    </app-alert>
+  } @else if (store.isEmpty()) {
+    <app-empty-state title="No items yet" message="Create your first item to see it here.">
+      <a matButton="tonal" routerLink="new">Create item</a>
+    </app-empty-state>
+  } @else if (store.items().length > 0) {
+    <!-- Wrapper con scroll orizzontale: su mobile la tabella non rompe il layout. -->
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="store.items()">
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let item" class="description">
+            {{ item.description ?? '—' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef class="numeric">Price</th>
+          <td mat-cell *matCellDef="let item" class="numeric">
+            {{ item.price | currency: 'EUR' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="updatedAt">
+          <th mat-header-cell *matHeaderCellDef>Updated</th>
+          <td mat-cell *matCellDef="let item">{{ item.updatedAt | date: 'short' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>
+            <span class="cdk-visually-hidden">Actions</span>
+          </th>
+          <td mat-cell *matCellDef="let item" class="actions">
+            <a
+              matIconButton
+              [routerLink]="[item.id, 'edit']"
+              matTooltip="Edit"
+              [attr.aria-label]="'Edit ' + item.name"
+            >
+              <mat-icon>edit</mat-icon>
+            </a>
+            <button
+              matIconButton
+              matTooltip="Delete"
+              [attr.aria-label]="'Delete ' + item.name"
+              (click)="remove(item)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+    </div>
+  }
+</div>

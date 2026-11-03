@@ -1,0 +1,55 @@
+<div class="app-container app-stack">
+  <section class="hero">
+    <p class="eyebrow app-text-label">Angular 22 · Angular Material · Signals</p>
+    <h1 class="app-text-display">Start your next Angular app from a clean base.</h1>
+    <p class="app-text-body app-text-muted lead">
+      Standalone components, signals, typed reactive forms, a typed API client and a ready-to-use
+      CRUD example against the common backend contract.
+    </p>
+    <div class="app-row">
+      <a matButton="filled" routerLink="/items">
+        <mat-icon>inventory_2</mat-icon>
+        Manage items
+      </a>
+      <a matButton="outlined" routerLink="/components">
+        <mat-icon>widgets</mat-icon>
+        Browse components
+      </a>
+    </div>
+  </section>
+
+  <mat-card appearance="outlined" class="status-card">
+    <mat-card-header>
+      <mat-card-title>Backend status</mat-card-title>
+      <mat-card-subtitle>GET /api/health</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="app-stack">
+      <app-status-indicator [status]="backend.status()" />
+      @if (backend.health(); as health) {
+        <dl class="details">
+          <dt>Service</dt>
+          <dd>{{ health.service }}</dd>
+          <dt>Server time</dt>
+          <dd>{{ health.timestamp | date: 'medium' }}</dd>
+        </dl>
+      } @else if (backend.status() === 'offline') {
+        <p class="app-text-muted">
+          The backend is not reachable. Start one of the backend templates on port 3000 or set
+          <code>API_PROXY_TARGET</code>.
+        </p>
+      }
+      @if (backend.lastCheck(); as lastCheck) {
+        <p class="app-text-muted checked">Last check: {{ lastCheck | date: 'mediumTime' }}</p>
+      }
+    </mat-card-content>
+    <mat-card-actions>
+      <app-loading-button
+        appearance="tonal"
+        [loading]="backend.status() === 'checking'"
+        (click)="refresh()"
+      >
+        Check again
+      </app-loading-button>
+    </mat-card-actions>
+  </mat-card>
+</div>

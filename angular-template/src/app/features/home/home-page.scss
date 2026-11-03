@@ -1,0 +1,45 @@
+// Stili della Home.
+.hero {
+  display: grid;
+  gap: var(--app-space-4);
+  padding: var(--app-space-6) 0;
+}
+
+.hero h1,
+.lead {
+  margin: 0;
+  max-width: 40ch;
+}
+
+.lead {
+  max-width: 65ch;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--mat-sys-primary);
+}
+
+.status-card {
+  max-width: 560px;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--app-space-1) var(--app-space-4);
+  margin: 0;
+}
+
+.details dt {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.details dd {
+  margin: 0;
+}
+
+.checked {
+  margin: 0;
+  font: var(--mat-sys-body-small);
+}
