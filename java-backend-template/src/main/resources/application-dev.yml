@@ -1,0 +1,10 @@
+# Profilo "dev": sviluppo locale. Log leggibili su console (testo colorato).
+spring:
+  output:
+    ansi:
+      enabled: detect
+
+management:
+  endpoint:
+    health:
+      show-details: always

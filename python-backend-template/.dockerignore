@@ -1,0 +1,20 @@
+# File esclusi dal contesto di build Docker: immagine più piccola e build più veloci.
+.git
+.gitignore
+.venv
+venv
+__pycache__
+*.py[cod]
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.coverage
+htmlcov
+coverage.xml
+.env
+tests
+Dockerfile
+.dockerignore
+README.md
+.idea
+.vscode

@@ -1,0 +1,20 @@
+# Output di Maven
+target/
+# Wrapper Maven: il jar viene scaricato da mvnw se serve, non va committato
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+bin/
+
+# Configurazione locale con possibili segreti
+.env
+
+# Log e file di sistema
+*.log
+.DS_Store

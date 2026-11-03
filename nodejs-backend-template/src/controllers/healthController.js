@@ -1,7 +1,16 @@
-const { buildHealthResponse } = require('../services/healthService');
+// Controller di GET /api/health: layer HTTP sottile, delega tutto al service.
 
-function getHealth(_request, response) {
-  response.status(200).json(buildHealthResponse());
+/**
+ * @param {import('../services/healthService.js').HealthService} healthService
+ */
+export function createHealthController(healthService) {
+  return {
+    /**
+     * @param {import('express').Request} _req
+     * @param {import('express').Response} res
+     */
+    getHealth(_req, res) {
+      res.status(200).json(healthService.getHealth());
+    },
+  };
 }
-
-module.exports = { getHealth };

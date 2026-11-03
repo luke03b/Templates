@@ -1,15 +1,19 @@
+<!--
+  Api: punto di ingresso HTTP (ASP.NET Core Minimal API). Contiene solo trasporto,
+  validazione dell'input, configurazione e composizione dei layer (dependency injection).
+-->
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>DotnetBackendTemplate.Api</RootNamespace>
-  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="DotNetEnv" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DotnetBackendTemplate.Application\DotnetBackendTemplate.Application.csproj" />
     <ProjectReference Include="..\DotnetBackendTemplate.Contracts\DotnetBackendTemplate.Contracts.csproj" />
+    <ProjectReference Include="..\DotnetBackendTemplate.Infrastructure\DotnetBackendTemplate.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,11 @@
+{
+  "all": true,
+  "include": ["src/**/*.js"],
+  "exclude": ["src/server.js", "src/repositories/itemRepository.js"],
+  "reporter": ["text", "html", "lcov"],
+  "check-coverage": true,
+  "lines": 90,
+  "functions": 90,
+  "branches": 85,
+  "statements": 90
+}

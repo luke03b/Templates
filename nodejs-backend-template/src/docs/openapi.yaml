@@ -1,0 +1,183 @@
+# Specifica OpenAPI dell'API (contratto comune in docs/api-contract.md della root).
+# Servita da Swagger UI su /docs e in JSON su /docs/openapi.json.
+openapi: 3.1.0
+info:
+  title: nodejs-backend-template API
+  version: 1.0.0
+  description: |
+    Node.js (Express 5) backend template: health check and in-memory CRUD for `items`.
+    Errors use Problem Details (RFC 9457) with `Content-Type: application/problem+json`.
+servers:
+  - url: /
+tags:
+  - name: health
+  - name: items
+paths:
+  /api/health:
+    get:
+      tags: [health]
+      summary: Service status
+      operationId: getHealth
+      responses:
+        '200':
+          description: The service is alive.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Health' }
+  /api/items:
+    get:
+      tags: [items]
+      summary: List items (sorted by createdAt)
+      operationId: listItems
+      responses:
+        '200':
+          description: All items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Item' }
+    post:
+      tags: [items]
+      summary: Create an item
+      operationId: createItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ItemInput' }
+      responses:
+        '201':
+          description: Item created.
+          headers:
+            Location:
+              description: URL of the new item.
+              schema: { type: string, example: /api/items/7c9e6679-7425-40de-944b-e07fc1f90ae7 }
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Item' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /api/items/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema: { type: string, format: uuid }
+        example: 7c9e6679-7425-40de-944b-e07fc1f90ae7
+    get:
+      tags: [items]
+      summary: Get an item
+      operationId: getItem
+      responses:
+        '200':
+          description: The item.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Item' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [items]
+      summary: Replace an item
+      operationId: updateItem
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ItemInput' }
+      responses:
+        '200':
+          description: Updated item.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Item' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [items]
+      summary: Delete an item
+      operationId: deleteItem
+      responses:
+        '204':
+          description: Item deleted (no body).
+        '404': { $ref: '#/components/responses/NotFound' }
+components:
+  schemas:
+    Health:
+      type: object
+      required: [status, service, timestamp]
+      properties:
+        status: { type: string, enum: [ok] }
+        service: { type: string, example: nodejs-backend-template }
+        timestamp: { type: string, format: date-time }
+    Item:
+      type: object
+      required: [id, name, description, price, createdAt, updatedAt]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, minLength: 1, maxLength: 100, example: Mechanical keyboard }
+        description:
+          type: [string, 'null']
+          maxLength: 500
+          example: Compact keyboard with hot-swappable switches.
+        price: { type: number, minimum: 0, example: 89.9 }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    ItemInput:
+      type: object
+      required: [name, price]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Trimmed before validation.
+          example: Mechanical keyboard
+        description:
+          type: [string, 'null']
+          maxLength: 500
+          example: Compact keyboard with hot-swappable switches.
+        price: { type: number, minimum: 0, example: 89.9 }
+    ProblemDetails:
+      type: object
+      required: [type, title, status, detail]
+      properties:
+        type: { type: string, example: about:blank }
+        title: { type: string }
+        status: { type: integer }
+        detail: { type: string }
+    ValidationProblemDetails:
+      allOf:
+        - $ref: '#/components/schemas/ProblemDetails'
+        - type: object
+          required: [errors]
+          properties:
+            errors:
+              type: object
+              description: Field name -> list of messages.
+              additionalProperties:
+                type: array
+                items: { type: string }
+  responses:
+    ValidationError:
+      description: Validation failed.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/ValidationProblemDetails' }
+          example:
+            type: about:blank
+            title: Validation failed
+            status: 400
+            detail: One or more fields are invalid.
+            errors:
+              name: [name is required]
+              price: [price must be greater than or equal to 0]
+    NotFound:
+      description: Resource not found.
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/ProblemDetails' }
+          example:
+            type: about:blank
+            title: Not Found
+            status: 404
+            detail: Item with id '00000000-0000-4000-8000-000000000000' was not found.

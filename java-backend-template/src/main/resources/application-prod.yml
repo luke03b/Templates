@@ -1,0 +1,11 @@
+# Profilo "prod": usato nel container Docker (SPRING_PROFILES_ACTIVE=prod).
+# Log strutturati in JSON (formato ECS), facili da indicizzare con Loki, ELK, Datadog, ecc.
+logging:
+  structured:
+    format:
+      console: ecs
+
+management:
+  endpoint:
+    health:
+      show-details: never

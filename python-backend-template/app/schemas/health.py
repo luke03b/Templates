@@ -1,6 +1,11 @@
-from pydantic import BaseModel
+"""DTO di risposta di `GET /api/health`."""
+
+from typing import Literal
+
+from app.schemas.base import ApiModel, UtcDateTime
 
 
-class HealthResponse(BaseModel):
-    status: str
-    message: str
+class HealthResponse(ApiModel):
+    status: Literal["ok"] = "ok"
+    service: str
+    timestamp: UtcDateTime

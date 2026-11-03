@@ -1,0 +1,14 @@
+{
+  // Configurazione per l'editor (VS Code): abilita il controllo dei tipi JSDoc sui file .js
+  // senza introdurre TypeScript nel progetto. Non viene usato a runtime.
+  "compilerOptions": {
+    "target": "ES2024",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "checkJs": true,
+    "strict": false,
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.js", "tests/**/*.js"]
+}

@@ -1,0 +1,15 @@
+<!--
+  Infrastructure: implementazioni tecniche delle interfacce definite in Application
+  (qui il repository in memoria; domani EF Core, client HTTP esterni, code, ...).
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DotnetBackendTemplate.Application\DotnetBackendTemplate.Application.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+<!--
+  Directory.Build.props: proprieta MSBuild applicate automaticamente a TUTTI i progetti
+  sotto questa cartella. Evita di ripetere le stesse impostazioni in ogni .csproj.
+-->
+<Project>
+  <PropertyGroup>
+    <!-- .NET 10 e la versione LTS corrente (supporto fino a novembre 2028). -->
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Nullable reference types: il compilatore segnala i possibili NullReferenceException. -->
+    <Nullable>enable</Nullable>
+    <!-- Using globali impliciti (System, System.Linq, System.Threading.Tasks, ...). -->
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Qualita: ogni warning (compilatore, analyzer, stile) blocca la build. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+    <!--
+      Il file XML della documentazione serve a OpenAPI (i commenti /// diventano descrizioni)
+      e abilita l'analyzer IDE0005 (using inutili). CS1591 = "manca il commento XML":
+      lo disattiviamo per non obbligare a documentare ogni membro pubblico.
+    -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <!-- Build deterministiche e riproducibili. -->
+    <Deterministic>true</Deterministic>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+</Project>

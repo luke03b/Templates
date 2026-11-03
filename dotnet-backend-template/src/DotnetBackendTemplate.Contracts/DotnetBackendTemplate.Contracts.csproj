@@ -1,9 +1,7 @@
+<!--
+  Contracts: DTO pubblici dell'API (cio che entra ed esce in JSON).
+  Non dipende da nessun altro progetto, cosi puo essere condiviso (es. con un client .NET).
+-->
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
 
 </Project>

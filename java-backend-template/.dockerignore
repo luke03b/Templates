@@ -1,0 +1,13 @@
+# File esclusi dal contesto di build Docker (build più veloci, niente segreti nell'immagine).
+target/
+.git/
+.gitignore
+.idea/
+.vscode/
+*.iml
+.env
+.env.*
+!.env.example
+Dockerfile
+.dockerignore
+README.md

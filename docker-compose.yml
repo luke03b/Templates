@@ -1,54 +1,79 @@
+# Avvia tutti i template insieme.
+#
+#   docker compose up --build          # build + avvio di tutto
+#   docker compose up --build react-template nodejs-backend-template   # solo alcuni servizi
+#   docker compose down                # ferma e rimuove i container
+#
+# Porte sull'host: frontend 8081-8084, backend 8085-8089 (vedi docs/api-contract.md).
+# Ogni frontend fa da proxy di /api verso il backend indicato in API_UPSTREAM:
+# cambia il valore qui sotto per collegare un frontend a un backend diverso
+# (tutti i backend espongono le stesse API).
+
+x-frontend-env: &frontend-env
+  API_UPSTREAM: http://nodejs-backend-template:3000
+
+x-backend-env: &backend-env
+  LOG_LEVEL: info
+  CORS_ORIGINS: http://localhost:5173,http://localhost:4200,http://localhost:5200,http://localhost:5300,http://localhost:8081,http://localhost:8082,http://localhost:8083,http://localhost:8084
+
 services:
+  # ---------------------------------------------------------------- frontend
   flutter-template:
-    build:
-      context: ./flutter-template
-    ports:
-      - "8081:80"
+    build: ./flutter-template
+    ports: ["8081:80"]
+    environment: *frontend-env
+    depends_on: [nodejs-backend-template]
 
   angular-template:
-    build:
-      context: ./angular-template
-    ports:
-      - "8082:80"
+    build: ./angular-template
+    ports: ["8082:80"]
+    environment: *frontend-env
+    depends_on: [nodejs-backend-template]
 
   react-template:
-    build:
-      context: ./react-template
-    ports:
-      - "8083:80"
+    build: ./react-template
+    ports: ["8083:80"]
+    environment: *frontend-env
+    depends_on: [nodejs-backend-template]
 
-  typescript-template:
-    build:
-      context: ./typescript-template
-    ports:
-      - "8084:80"
+  csharp-frontend-template:
+    build: ./csharp-frontend-template
+    ports: ["8084:80"]
+    environment: *frontend-env
+    depends_on: [nodejs-backend-template]
 
-  java-template:
-    build:
-      context: ./java-template
-    ports:
-      - "8085:8080"
+  # ----------------------------------------------------------------- backend
+  java-backend-template:
+    build: ./java-backend-template
+    ports: ["8085:8080"]
+    environment:
+      <<: *backend-env
+      PORT: "8080"
 
   python-backend-template:
-    build:
-      context: ./python-backend-template
-    ports:
-      - "8086:8000"
+    build: ./python-backend-template
+    ports: ["8086:8000"]
+    environment:
+      <<: *backend-env
+      PORT: "8000"
 
   dotnet-backend-template:
-    build:
-      context: ./dotnet-backend-template
-    ports:
-      - "8087:8080"
+    build: ./dotnet-backend-template
+    ports: ["8087:8080"]
+    environment:
+      <<: *backend-env
+      PORT: "8080"
 
-  csharp-template:
-    build:
-      context: ./csharp-template
-    ports:
-      - "8088:8080"
+  typescript-backend-template:
+    build: ./typescript-backend-template
+    ports: ["8088:3001"]
+    environment:
+      <<: *backend-env
+      PORT: "3001"
 
   nodejs-backend-template:
-    build:
-      context: ./nodejs-backend-template
-    ports:
-      - "8089:3000"
+    build: ./nodejs-backend-template
+    ports: ["8089:3000"]
+    environment:
+      <<: *backend-env
+      PORT: "3000"
