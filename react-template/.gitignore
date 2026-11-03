@@ -1,0 +1,18 @@
+# Dipendenze e output di build
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Variabili d'ambiente locali (committa solo .env.example)
+.env
+.env.local
+.env.*.local
+
+# Log ed editor
+npm-debug.log*
+*.log
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json

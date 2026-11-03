@@ -1,0 +1,71 @@
+/* Stili della pagina Componenti (showcase). */
+.layout {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.section {
+  scroll-margin-top: calc(var(--navbar-height) + var(--space-3));
+}
+
+.description {
+  color: var(--color-text-muted);
+}
+
+.demo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.stack {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.formGrid {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+@media (min-width: 48rem) {
+  .formGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .full {
+    grid-column: 1 / -1;
+  }
+}
+
+.code {
+  position: relative;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+}
+
+.code pre {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+}
+
+.copy {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+}

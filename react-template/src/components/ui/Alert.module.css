@@ -1,0 +1,56 @@
+/* Stili dell'Alert: barra colorata a sinistra e sfondo tenue in base alla variante. */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-left-width: 4px;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.content p:last-child {
+  margin-bottom: 0;
+}
+
+.title {
+  margin: 0 0 var(--space-1);
+  font-weight: var(--font-weight-bold);
+}
+
+.close {
+  padding: 0 var(--space-1);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.info {
+  border-left-color: var(--color-info);
+  background: var(--color-info-soft);
+}
+
+.success {
+  border-left-color: var(--color-success);
+  background: var(--color-success-soft);
+}
+
+.warning {
+  border-left-color: var(--color-warning);
+  background: var(--color-warning-soft);
+}
+
+.danger {
+  border-left-color: var(--color-danger);
+  background: var(--color-danger-soft);
+}
