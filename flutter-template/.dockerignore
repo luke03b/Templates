@@ -1,0 +1,15 @@
+# File esclusi dal contesto di build Docker (build più veloce e pulita).
+.dart_tool/
+.idea/
+.vscode/
+*.iml
+build/
+coverage/
+android/
+ios/
+.git/
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+**/.DS_Store
