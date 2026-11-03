@@ -72,6 +72,12 @@ Quando lavori sul frontend, applica queste regole:
    - Aggiungi test per il layer di stato e per gli effetti collaterali.
    - Aggiungi test per validazione e helper puri.
 
+## Contratto API e struttura dei template frontend
+
+- Il frontend chiama solo percorsi relativi `/api/...` definiti in `docs/api-contract.md`: in sviluppo il dev server fa da proxy (`API_PROXY_TARGET`), in Docker nginx fa da reverse proxy (`API_UPSTREAM`). Dove non c'è un proxy (Flutter, Blazor) si usa un URL base configurabile.
+- Ogni template ha almeno: Home con indicatore di stato del backend, pagina Componenti (showcase dei componenti principali da copiare), pagina Items con CRUD completo e pagina 404.
+- Design token (colori, spaziature, font) in un unico file. Niente gradienti, neon o glow.
+
 ## Best Practices
 
 - Mantieni il confine chiaro: pagine per flussi, componenti per presentazione, stato centrale per logica condivisa, services per trasporto e storage.

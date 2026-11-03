@@ -69,6 +69,12 @@ Quando lavori sul backend, segui questo flusso senza eccezioni:
    - Il backend risolve il target e poi chiama l'endpoint corretto.
    - Non codificare la logica di elaborazione esterna nel controller.
 
+## Contratto API dei template
+
+- Le rotte (`/api/health`, CRUD `/api/items`), il formato degli errori (Problem Details, RFC 9457, `application/problem+json`) e le variabili d'ambiente (`PORT`, `CORS_ORIGINS`, `LOG_LEVEL`) sono definiti in `docs/api-contract.md` e sono identici in tutti i backend.
+- Il repository dei dati sta dietro un'interfaccia: l'implementazione in memoria si sostituisce con una su database senza toccare controller e service.
+- Ogni backend ha OpenAPI/Swagger, un `.env.example`, un Dockerfile multi-stage non-root con HEALTHCHECK e test di integrazione HTTP su tutti gli endpoint.
+
 ## Best Practices
 
 - Tieni i controller o handler brevi e leggibili.

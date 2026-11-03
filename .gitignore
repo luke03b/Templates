@@ -1,1 +1,6 @@
-/.github
+# File di sistema ed editor (ogni template ha poi il proprio .gitignore specifico)
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+.env

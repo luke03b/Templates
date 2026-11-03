@@ -16,6 +16,7 @@ Produrre codice .NET coerente con un'architettura layered, con separazione rigor
 
 1. Usa un API layer sottile.
    - Controller o endpoint handler devono ricevere input, validarlo e delegare.
+   - Per i nuovi progetti su .NET 10 preferisci le Minimal API con `MapGroup` e `TypedResults` (come nel template `dotnet-backend-template`); i Controller restano validi per progetti esistenti o molto grandi.
    - Non inserire business logic nel layer di ingresso.
 
 2. Metti la logica di business nei application services.
