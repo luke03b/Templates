@@ -1,0 +1,52 @@
+@* ItemForm: form di creazione/modifica di un Item. È presentazionale: non chiama l'API,
+   notifica il genitore con OnValidSubmit e mostra gli errori del server con ShowServerErrors.
+   EditForm + DataAnnotationsValidator validano nel browser con gli attributi di ItemInput. *@
+
+<EditForm Model="Model" OnValidSubmit="OnValidSubmit" class="form" novalidate>
+    <DataAnnotationsValidator />
+    <ServerValidator @ref="_serverValidator" />
+
+    @if (ErrorMessage is not null)
+    {
+        <Alert Tone="Tone.Danger">@ErrorMessage</Alert>
+    }
+
+    <FormField Label="Name" InputId="item-name" For="() => Model.Name" Required="true">
+        <InputText id="item-name" class="input" @bind-Value="Model.Name" maxlength="@ItemInput.NameMaxLength" autocomplete="off" />
+    </FormField>
+
+    <FormField Label="Description" InputId="item-description" For="() => Model.Description" Hint="Optional, up to 500 characters.">
+        <InputTextArea id="item-description" class="input" rows="3" @bind-Value="Model.Description" />
+    </FormField>
+
+    <FormField Label="Price" InputId="item-price" For="() => Model.Price" Required="true">
+        <InputNumber id="item-price" class="input" step="0.01" min="0" @bind-Value="Model.Price" />
+    </FormField>
+
+    <div class="form-actions">
+        @if (OnCancel.HasDelegate)
+        {
+            <AppButton Variant="ButtonVariant.Secondary" OnClick="OnCancel" Disabled="Saving">Cancel</AppButton>
+        }
+        <AppButton Type="submit" Loading="Saving">@SubmitLabel</AppButton>
+    </div>
+</EditForm>
+
+@code {
+    private ServerValidator? _serverValidator;
+
+    [Parameter, EditorRequired] public ItemInput Model { get; set; } = new();
+
+    [Parameter] public EventCallback<EditContext> OnValidSubmit { get; set; }
+
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    [Parameter] public bool Saving { get; set; }
+
+    [Parameter] public string SubmitLabel { get; set; } = "Save";
+
+    /// <summary>Errore generico (non legato a un campo) da mostrare in cima alla form.</summary>
+    [Parameter] public string? ErrorMessage { get; set; }
+
+    public void ShowServerErrors(IReadOnlyDictionary<string, string[]> errors) => _serverValidator?.DisplayErrors(errors);
+}

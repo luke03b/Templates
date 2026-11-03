@@ -1,0 +1,9 @@
+@* Badge: etichetta compatta per stati e conteggi. *@
+
+<span class="@UiCss.Join("badge", UiCss.ToneClass(Tone))">@ChildContent</span>
+
+@code {
+    [Parameter] public Tone Tone { get; set; } = Tone.Neutral;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

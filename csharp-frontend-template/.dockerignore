@@ -1,0 +1,14 @@
+# File esclusi dal contesto di build Docker (build più veloce e immagine pulita).
+**/bin/
+**/obj/
+**/TestResults/
+publish/
+.vs/
+.idea/
+.vscode/
+.git/
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+tests/

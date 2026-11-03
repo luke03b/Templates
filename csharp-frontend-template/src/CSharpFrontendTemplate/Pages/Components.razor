@@ -1,0 +1,254 @@
+@* Components: vetrina dei componenti riutilizzabili di Components/Ui con esempi dal vivo
+   e codice da copiare. Ogni sezione usa <CodeExample> (anteprima + snippet). *@
+@page "/components"
+@inject ToastService Toasts
+@inject NavigationManager Navigation
+
+<PageTitle>Components · CSharp Frontend Template</PageTitle>
+
+<div class="page-header">
+    <div>
+        <h1>Components</h1>
+        <p class="text-muted">Reusable building blocks from <code>Components/Ui</code>. Copy the snippets into your pages.</p>
+    </div>
+</div>
+
+<nav class="toc" aria-label="Sections">
+    @foreach (var (id, text) in Sections)
+    {
+        <a href="components#@id">@text</a>
+    }
+</nav>
+
+<div class="stack-lg">
+    <section id="typography">
+        <CodeExample Title="Typography" Description="Base styles come from tokens.css and app.css." Code="@ShowcaseSnippets.Typography">
+            <h1 class="m-0">Heading 1</h1>
+            <h2>Heading 2</h2>
+            <p class="lead">Lead paragraph</p>
+            <p>Body text with <code>inline code</code> and <a href="components#typography">a link</a>.</p>
+            <p class="text-muted">Muted text</p>
+        </CodeExample>
+    </section>
+
+    <section id="buttons">
+        <CodeExample Title="Buttons" Description="Variants, sizes, disabled and loading states." Code="@ShowcaseSnippets.Buttons">
+            <div class="cluster">
+                <AppButton>Primary</AppButton>
+                <AppButton Variant="ButtonVariant.Secondary">Secondary</AppButton>
+                <AppButton Variant="ButtonVariant.Danger">Danger</AppButton>
+                <AppButton Variant="ButtonVariant.Ghost">Ghost</AppButton>
+                <AppButton Disabled="true">Disabled</AppButton>
+                <AppButton Loading="_buttonLoading" OnClick="SimulateLoadingAsync">@(_buttonLoading ? "Saving..." : "Click to load")</AppButton>
+            </div>
+            <div class="cluster mt-2">
+                <AppButton Size="ButtonSize.Small">Small</AppButton>
+                <AppButton>Medium</AppButton>
+                <AppButton Size="ButtonSize.Large">Large</AppButton>
+            </div>
+        </CodeExample>
+    </section>
+
+    <section id="forms">
+        <CodeExample Title="Form fields" Description="EditForm + DataAnnotations: text, email, select, radio, switch, checkbox and textarea with validation." Code="@ShowcaseSnippets.Form">
+            <EditForm Model="_demoModel" OnValidSubmit="OnDemoSubmit" class="form form-narrow" novalidate>
+                <DataAnnotationsValidator />
+                <FormField Label="Full name" InputId="demo-full-name" For="() => _demoModel.FullName" Required="true">
+                    <InputText id="demo-full-name" class="input" @bind-Value="_demoModel.FullName" />
+                </FormField>
+                <FormField Label="Email" InputId="demo-email" For="() => _demoModel.Email" Required="true" Hint="We never share your email.">
+                    <InputText id="demo-email" type="email" class="input" @bind-Value="_demoModel.Email" />
+                </FormField>
+                <FormField Label="Role" InputId="demo-role" For="() => _demoModel.Role" Required="true">
+                    <InputSelect id="demo-role" class="input" @bind-Value="_demoModel.Role">
+                        <option value="">Select a role...</option>
+                        <option value="developer">Developer</option>
+                        <option value="designer">Designer</option>
+                        <option value="manager">Manager</option>
+                    </InputSelect>
+                </FormField>
+                <FormField Label="Plan" For="() => _demoModel.Plan" Fieldset="true" Required="true">
+                    <InputRadioGroup @bind-Value="_demoModel.Plan">
+                        <div class="cluster">
+                            <label class="check"><InputRadio Value="@("free")" /> Free</label>
+                            <label class="check"><InputRadio Value="@("pro")" /> Pro</label>
+                            <label class="check"><InputRadio Value="@("team")" /> Team</label>
+                        </div>
+                    </InputRadioGroup>
+                </FormField>
+                <FormField Label="Message" InputId="demo-message" For="() => _demoModel.Message">
+                    <InputTextArea id="demo-message" class="input" rows="3" @bind-Value="_demoModel.Message" />
+                </FormField>
+                <FormField For="() => _demoModel.Newsletter">
+                    <InputSwitch @bind-Value="_demoModel.Newsletter" Label="Subscribe to the newsletter" />
+                </FormField>
+                <FormField For="() => _demoModel.AcceptTerms">
+                    <label class="check"><InputCheckbox @bind-Value="_demoModel.AcceptTerms" /> I accept the terms</label>
+                </FormField>
+                <div class="form-actions">
+                    <AppButton Variant="ButtonVariant.Secondary" OnClick="ResetDemoForm">Reset</AppButton>
+                    <AppButton Type="submit">Submit</AppButton>
+                </div>
+            </EditForm>
+        </CodeExample>
+    </section>
+
+    <section id="cards">
+        <CodeExample Title="Cards" Code="@ShowcaseSnippets.Card">
+            <div class="grid grid-2">
+                <Card Title="Card title" Subtitle="Subtitle">
+                    <ChildContent>Card body content.</ChildContent>
+                    <Footer><AppButton Size="ButtonSize.Small">Action</AppButton></Footer>
+                </Card>
+                <Card>Card without header.</Card>
+            </div>
+        </CodeExample>
+    </section>
+
+    <section id="alerts">
+        <CodeExample Title="Alerts" Code="@ShowcaseSnippets.Alerts">
+            <div class="stack">
+                <Alert Tone="Tone.Info" Title="Info">Something you should know.</Alert>
+                <Alert Tone="Tone.Success">Saved successfully.</Alert>
+                <Alert Tone="Tone.Warning">Check your input.</Alert>
+                @if (_dangerAlertVisible)
+                {
+                    <Alert Tone="Tone.Danger" OnDismiss="() => _dangerAlertVisible = false">Something went wrong. Dismiss me.</Alert>
+                }
+                else
+                {
+                    <AppButton Size="ButtonSize.Small" Variant="ButtonVariant.Secondary" OnClick="() => _dangerAlertVisible = true">Show the alert again</AppButton>
+                }
+            </div>
+        </CodeExample>
+    </section>
+
+    <section id="toasts">
+        <CodeExample Title="Toasts" Description="ToastService is injected anywhere; ToastHost in MainLayout renders the notifications." Code="@ShowcaseSnippets.Toasts">
+            <div class="cluster">
+                <AppButton OnClick='() => Toasts.ShowSuccess("Saved successfully!")'>Success toast</AppButton>
+                <AppButton Variant="ButtonVariant.Secondary" OnClick='() => Toasts.Show("Just so you know.")'>Info toast</AppButton>
+                <AppButton Variant="ButtonVariant.Danger" OnClick='() => Toasts.ShowError("Something failed.")'>Error toast</AppButton>
+            </div>
+        </CodeExample>
+    </section>
+
+    <section id="modal">
+        <CodeExample Title="Modal" Description="Closes with Esc, the close button or a click on the backdrop." Code="@ShowcaseSnippets.Modal">
+            <AppButton OnClick="() => _modalOpen = true">Open modal</AppButton>
+            <Modal @bind-IsOpen="_modalOpen" Title="Modal title">
+                <ChildContent><p>This is the modal body. Put any content here, including forms.</p></ChildContent>
+                <Footer>
+                    <AppButton Variant="ButtonVariant.Secondary" OnClick="() => _modalOpen = false">Close</AppButton>
+                    <AppButton OnClick="ConfirmModal">Confirm</AppButton>
+                </Footer>
+            </Modal>
+        </CodeExample>
+    </section>
+
+    <section id="tabs">
+        <CodeExample Title="Tabs" Description="Use the arrow keys to move between tabs." Code="@ShowcaseSnippets.Tabs">
+            <Tabs>
+                <TabPanel Title="Overview">First tab content.</TabPanel>
+                <TabPanel Title="Details">Second tab content.</TabPanel>
+                <TabPanel Title="Settings">Third tab content.</TabPanel>
+            </Tabs>
+        </CodeExample>
+    </section>
+
+    <section id="table">
+        <CodeExample Title="Table (QuickGrid)" Description="Official Microsoft grid: sorting and pagination." Code="@ShowcaseSnippets.Table">
+            <div class="table-wrapper">
+                <QuickGrid Items="_people" Pagination="_pagination" Class="table">
+                    <PropertyColumn Property="p => p.Name" Sortable="true" />
+                    <PropertyColumn Property="p => p.Role" Sortable="true" />
+                    <TemplateColumn Title="Status" Context="p">
+                        <Badge Tone="@(p.Active ? Tone.Success : Tone.Neutral)">@(p.Active ? "Active" : "Inactive")</Badge>
+                    </TemplateColumn>
+                </QuickGrid>
+            </div>
+            <Paginator State="_pagination" />
+        </CodeExample>
+    </section>
+
+    <section id="badges">
+        <CodeExample Title="Badges" Code="@ShowcaseSnippets.Badges">
+            <div class="cluster">
+                <Badge>Neutral</Badge>
+                <Badge Tone="Tone.Info">Info</Badge>
+                <Badge Tone="Tone.Success">Success</Badge>
+                <Badge Tone="Tone.Warning">Warning</Badge>
+                <Badge Tone="Tone.Danger">Danger</Badge>
+            </div>
+        </CodeExample>
+    </section>
+
+    <section id="loading">
+        <CodeExample Title="Spinner and status" Code="@ShowcaseSnippets.Spinner">
+            <div class="cluster">
+                <Spinner Size="ButtonSize.Small" />
+                <Spinner />
+                <Spinner Size="ButtonSize.Large" Label="Loading data" />
+                <StatusIndicator Status="StatusIndicator.ServiceStatus.Online" />
+                <StatusIndicator Status="StatusIndicator.ServiceStatus.Offline" />
+                <StatusIndicator Status="StatusIndicator.ServiceStatus.Checking" />
+            </div>
+        </CodeExample>
+    </section>
+
+    <section id="navigation">
+        <CodeExample Title="Navigation" Description="NavLink highlights the current route; NavigationManager navigates from code." Code="@ShowcaseSnippets.Navigation">
+            <div class="cluster">
+                <NavLink class="navbar-link" href="components" Match="NavLinkMatch.Prefix">Components (active)</NavLink>
+                <NavLink class="navbar-link" href="items">Items</NavLink>
+                <AppButton Variant="ButtonVariant.Secondary" OnClick='() => Navigation.NavigateTo("items")'>Go to items</AppButton>
+            </div>
+        </CodeExample>
+    </section>
+</div>
+
+@code {
+    private static readonly (string Id, string Text)[] Sections =
+    [
+        ("typography", "Typography"), ("buttons", "Buttons"), ("forms", "Forms"), ("cards", "Cards"),
+        ("alerts", "Alerts"), ("toasts", "Toasts"), ("modal", "Modal"), ("tabs", "Tabs"),
+        ("table", "Table"), ("badges", "Badges"), ("loading", "Spinner"), ("navigation", "Navigation"),
+    ];
+
+    private sealed record Person(string Name, string Role, bool Active);
+
+    private readonly IQueryable<Person> _people = new[]
+    {
+        new Person("Ada Lovelace", "Engineer", true),
+        new Person("Alan Turing", "Researcher", true),
+        new Person("Grace Hopper", "Admiral", false),
+        new Person("Linus Torvalds", "Maintainer", true),
+        new Person("Margaret Hamilton", "Director", false),
+        new Person("Dennis Ritchie", "Engineer", true),
+    }.AsQueryable();
+
+    private readonly PaginationState _pagination = new() { ItemsPerPage = 4 };
+
+    private DemoFormModel _demoModel = new();
+    private bool _buttonLoading;
+    private bool _dangerAlertVisible = true;
+    private bool _modalOpen;
+
+    private async Task SimulateLoadingAsync()
+    {
+        _buttonLoading = true;
+        await Task.Delay(1500);
+        _buttonLoading = false;
+    }
+
+    private void OnDemoSubmit() => Toasts.ShowSuccess($"Form submitted for {_demoModel.FullName}.");
+
+    // Nuova istanza del modello = form pulita (anche gli errori di validazione spariscono).
+    private void ResetDemoForm() => _demoModel = new DemoFormModel();
+
+    private void ConfirmModal()
+    {
+        _modalOpen = false;
+        Toasts.ShowSuccess("Confirmed!");
+    }
+}

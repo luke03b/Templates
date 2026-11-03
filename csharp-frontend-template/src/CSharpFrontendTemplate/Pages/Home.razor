@@ -1,0 +1,64 @@
+@* Home: landing page con l'indicatore di stato del backend (GET /api/health). *@
+@page "/"
+@inject IApiClient Api
+
+<PageTitle>Home · CSharp Frontend Template</PageTitle>
+
+<section class="hero">
+    <h1>CSharp Frontend Template</h1>
+    <p class="lead">
+        A Blazor WebAssembly starter on .NET 10 with reusable UI components, a typed API client
+        and a complete CRUD example against <code>/api/items</code>.
+    </p>
+    <div class="hero-status">
+        <span>Backend:</span>
+        <StatusIndicator Status="_status" />
+        @if (_service is not null)
+        {
+            <Badge Tone="Tone.Neutral">@_service</Badge>
+        }
+        <AppButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Small" Loading="_status == StatusIndicator.ServiceStatus.Checking" OnClick="CheckHealthAsync">
+            Retry
+        </AppButton>
+    </div>
+</section>
+
+<div class="grid grid-3">
+    <Card Title="Components" Subtitle="UI showcase">
+        <ChildContent>Buttons, form fields with validation, cards, alerts, toasts, modals, tabs and tables.</ChildContent>
+        <Footer><a href="components">Open the showcase &rarr;</a></Footer>
+    </Card>
+    <Card Title="Items" Subtitle="CRUD example">
+        <ChildContent>List, create, edit and delete items with loading, error and server-side validation handling.</ChildContent>
+        <Footer><a href="items">Manage items &rarr;</a></Footer>
+    </Card>
+    <Card Title="Configuration" Subtitle="wwwroot/appsettings.json">
+        <ChildContent>
+            Set <code>ApiBaseUrl</code> to point to any backend template. Empty means same origin
+            (nginx proxies <code>/api/</code>).
+        </ChildContent>
+    </Card>
+</div>
+
+@code {
+    private StatusIndicator.ServiceStatus _status = StatusIndicator.ServiceStatus.Checking;
+    private string? _service;
+
+    protected override Task OnInitializedAsync() => CheckHealthAsync();
+
+    private async Task CheckHealthAsync()
+    {
+        _status = StatusIndicator.ServiceStatus.Checking;
+        try
+        {
+            var health = await Api.GetHealthAsync();
+            _service = health.Service;
+            _status = health.Status == "ok" ? StatusIndicator.ServiceStatus.Online : StatusIndicator.ServiceStatus.Offline;
+        }
+        catch (ApiException)
+        {
+            _service = null;
+            _status = StatusIndicator.ServiceStatus.Offline;
+        }
+    }
+}

@@ -1,0 +1,31 @@
+@* ToastHost: mostra i toast del ToastService. Va inserito UNA volta nel layout.
+   @implements IDisposable: ci si disiscrive dall'evento quando il componente viene distrutto. *@
+@implements IDisposable
+@inject ToastService Toasts
+
+<div class="toast-region" aria-live="polite" aria-atomic="false">
+    @foreach (var toast in Toasts.Toasts)
+    {
+        <div class="@UiCss.Join("toast", UiCss.ToneClass(ToTone(toast.Level)))" role="@(toast.Level == ToastLevel.Error ? "alert" : "status")">
+            <span class="toast-message">@toast.Message</span>
+            <button type="button" class="toast-close" aria-label="Dismiss notification" @onclick="() => Toasts.Dismiss(toast.Id)">&times;</button>
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized() => Toasts.Changed += OnToastsChanged;
+
+    // L'evento può arrivare da un timer: InvokeAsync riporta l'aggiornamento sul "renderer" di Blazor.
+    private void OnToastsChanged() => _ = InvokeAsync(StateHasChanged);
+
+    private static Tone ToTone(ToastLevel level) => level switch
+    {
+        ToastLevel.Success => Tone.Success,
+        ToastLevel.Warning => Tone.Warning,
+        ToastLevel.Error => Tone.Danger,
+        _ => Tone.Info,
+    };
+
+    public void Dispose() => Toasts.Changed -= OnToastsChanged;
+}

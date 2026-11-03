@@ -1,0 +1,47 @@
+@* CodeExample: blocco della pagina showcase con anteprima dal vivo (ChildContent) e il codice
+   da copiare. Il bottone "Copy" usa l'API del browser navigator.clipboard via JS interop. *@
+@inject IJSRuntime JS
+
+<article class="example">
+    <header class="example-header">
+        <h3 class="example-title">@Title</h3>
+        @if (Description is not null)
+        {
+            <p class="text-muted">@Description</p>
+        }
+    </header>
+    <div class="example-preview">@ChildContent</div>
+    <div class="example-code">
+        <AppButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Small" class="example-copy" OnClick="CopyAsync">
+            @(_copied ? "Copied" : "Copy")
+        </AppButton>
+        <pre><code>@Code</code></pre>
+    </div>
+</article>
+
+@code {
+    private bool _copied;
+
+    [Parameter, EditorRequired] public string Title { get; set; } = string.Empty;
+
+    [Parameter] public string? Description { get; set; }
+
+    [Parameter, EditorRequired] public string Code { get; set; } = string.Empty;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private async Task CopyAsync()
+    {
+        try
+        {
+            // Chiama la funzione JavaScript navigator.clipboard.writeText(Code).
+            await JS.InvokeVoidAsync("navigator.clipboard.writeText", Code);
+            _copied = true;
+        }
+        catch (JSException)
+        {
+            // Clipboard non disponibile (es. pagina non in HTTPS/localhost): nessun crash, resta "Copy".
+            _copied = false;
+        }
+    }
+}

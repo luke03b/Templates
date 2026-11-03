@@ -1,5 +1,20 @@
+# Output di build .NET
 bin/
 obj/
+publish/
+artifacts/
+TestResults/
+coverage/
+*.trx
+
+# IDE
 .vs/
 .idea/
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+*.user
+*.suo
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

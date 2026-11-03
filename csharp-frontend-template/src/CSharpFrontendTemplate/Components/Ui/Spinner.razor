@@ -1,0 +1,12 @@
+@* Spinner: indicatore di caricamento accessibile (role="status" + testo per screen reader). *@
+
+<span class="@UiCss.Join("spinner", Size == ButtonSize.Small ? "spinner-sm" : Size == ButtonSize.Large ? "spinner-lg" : null)"
+      role="status">
+    <span class="visually-hidden">@Label</span>
+</span>
+
+@code {
+    [Parameter] public ButtonSize Size { get; set; } = ButtonSize.Medium;
+
+    [Parameter] public string Label { get; set; } = "Loading";
+}

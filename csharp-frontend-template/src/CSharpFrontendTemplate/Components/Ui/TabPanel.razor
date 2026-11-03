@@ -1,0 +1,29 @@
+@* TabPanel: una singola scheda di <Tabs>. Si registra nel genitore e mostra il contenuto solo se attiva. *@
+@implements IDisposable
+
+@if (Parent?.ActivePanel == this)
+{
+    <div role="tabpanel" id="@Parent.PanelId(this)" aria-labelledby="@Parent.TabId(this)" class="tab-panel" tabindex="0">
+        @ChildContent
+    </div>
+}
+
+@code {
+    [CascadingParameter] private Tabs? Parent { get; set; }
+
+    [Parameter, EditorRequired] public string Title { get; set; } = string.Empty;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Parent is null)
+        {
+            throw new InvalidOperationException($"{nameof(TabPanel)} must be placed inside a {nameof(Tabs)} component.");
+        }
+
+        Parent.Register(this);
+    }
+
+    public void Dispose() => Parent?.Unregister(this);
+}

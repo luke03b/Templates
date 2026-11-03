@@ -1,0 +1,21 @@
+<!--
+  Central Package Management (CPM): le VERSIONI dei pacchetti NuGet sono definite solo qui.
+  Nei .csproj si scrive <PackageReference Include="Nome" /> senza Version.
+  Per aggiornare un pacchetto basta cambiare la riga corrispondente.
+-->
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup Label="App">
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.14" />
+    <PackageVersion Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.14" />
+  </ItemGroup>
+  <ItemGroup Label="Test">
+    <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <PackageVersion Include="bunit" Version="2.13.3" />
+    <PackageVersion Include="Microsoft.Extensions.TimeProvider.Testing" Version="10.11.0" />
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.12.0" />
+  </ItemGroup>
+</Project>

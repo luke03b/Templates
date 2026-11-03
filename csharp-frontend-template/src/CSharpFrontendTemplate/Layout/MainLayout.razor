@@ -1,0 +1,17 @@
+@* MainLayout: struttura comune a tutte le pagine (header con menu, contenuto, footer).
+   @Body è il segnaposto in cui il Router inserisce la pagina corrente. *@
+@inherits LayoutComponentBase
+
+<a class="skip-link" href="#main-content">Skip to content</a>
+<div class="app-shell">
+    <NavMenu />
+    <main id="main-content" class="app-main" tabindex="-1">
+        <div class="container">
+            @Body
+        </div>
+    </main>
+    <footer class="app-footer">
+        <div class="container">CSharp Frontend Template &middot; Blazor WebAssembly on .NET 10</div>
+    </footer>
+</div>
+<ToastHost />
