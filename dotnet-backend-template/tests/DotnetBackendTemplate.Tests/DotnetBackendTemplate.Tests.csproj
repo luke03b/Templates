@@ -1,29 +1,36 @@
+<!--
+  Test: unit test (service, repository, validazione) e test di integrazione HTTP
+  con WebApplicationFactory, che avvia l'API in memoria senza aprire porte reali.
+-->
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <IsPackable>false</IsPackable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <!--
+      xUnit v3 usa Microsoft.Testing.Platform (MTP, abilitato in global.json): il progetto di
+      test e un eseguibile che si puo lanciare anche direttamente (dotnet run).
+    -->
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.12" />
-    <PackageReference Include="xunit" Version="2.9.3" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.2">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
+    <PackageReference Include="xunit.v3" />
+    <!-- Coverage ufficiale Microsoft per Microsoft.Testing.Platform (opzione coverage di dotnet test). -->
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Using globali: disponibili in tutti i file di test senza ripeterli. -->
+    <Using Include="Xunit" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DotnetBackendTemplate.Api\DotnetBackendTemplate.Api.csproj" />
     <ProjectReference Include="..\..\src\DotnetBackendTemplate.Application\DotnetBackendTemplate.Application.csproj" />
     <ProjectReference Include="..\..\src\DotnetBackendTemplate.Contracts\DotnetBackendTemplate.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\DotnetBackendTemplate.Infrastructure\DotnetBackendTemplate.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,27 @@
+@* Alert: messaggio in linea (info, successo, avviso, errore), opzionalmente chiudibile.
+   Gli errori usano role="alert" così gli screen reader li annunciano subito. *@
+
+<div class="@UiCss.Join("alert", UiCss.ToneClass(Tone))" role="@(Tone == Tone.Danger ? "alert" : "status")">
+    <div class="alert-content">
+        @if (Title is not null)
+        {
+            <strong class="alert-title">@Title</strong>
+        }
+        <div>@ChildContent</div>
+    </div>
+    @if (OnDismiss.HasDelegate)
+    {
+        <button type="button" class="alert-close" aria-label="Dismiss" @onclick="OnDismiss">&times;</button>
+    }
+</div>
+
+@code {
+    [Parameter] public Tone Tone { get; set; } = Tone.Info;
+
+    [Parameter] public string? Title { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    /// <summary>Se impostato compare la "x" di chiusura; il genitore decide se nascondere l'alert.</summary>
+    [Parameter] public EventCallback OnDismiss { get; set; }
+}

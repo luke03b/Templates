@@ -1,0 +1,57 @@
+<app-showcase-section
+  anchor="forms"
+  title="Form fields"
+  description="Text, select, textarea, checkbox, radio and switch with validation"
+  [code]="code"
+>
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="app-stack">
+    <div class="grid">
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" autocomplete="email" />
+        <mat-error>{{ form.controls.email.errors | errorMessage }}</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role">
+          @for (role of roles; track role) {
+            <mat-option [value]="role">{{ role }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>{{ form.controls.role.errors | errorMessage }}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <mat-label>Bio</mat-label>
+      <textarea matInput formControlName="bio" rows="2"></textarea>
+      <mat-hint align="end">{{ form.controls.bio.value.length }} / 200</mat-hint>
+      <mat-error>{{ form.controls.bio.errors | errorMessage }}</mat-error>
+    </mat-form-field>
+
+    <mat-radio-group formControlName="plan" aria-label="Plan" class="app-row">
+      <mat-radio-button value="free">Free</mat-radio-button>
+      <mat-radio-button value="pro">Pro</mat-radio-button>
+      <mat-radio-button value="team">Team</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-slide-toggle formControlName="newsletter">Subscribe to the newsletter</mat-slide-toggle>
+
+    <div>
+      <mat-checkbox formControlName="terms">I accept the terms</mat-checkbox>
+      @if (form.controls.terms.touched && form.controls.terms.invalid) {
+        <p class="terms-error">You must accept the terms.</p>
+      }
+    </div>
+
+    <div class="app-row">
+      <button matButton="filled" type="submit">Submit</button>
+      <button matButton type="button" (click)="form.reset(); submitted.set(null)">Reset</button>
+    </div>
+
+    @if (submitted(); as value) {
+      <pre>{{ value | json }}</pre>
+    }
+  </form>
+</app-showcase-section>

@@ -1,0 +1,61 @@
+// Stili della shell: layout a colonna con toolbar fissa in alto, contenuto e footer.
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  gap: var(--app-space-2);
+  height: var(--app-toolbar-height);
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--app-space-2);
+  margin-right: var(--app-space-4);
+  color: inherit;
+  text-decoration: none;
+  font: var(--mat-sys-title-medium);
+}
+
+.desktop-nav {
+  display: none;
+  gap: var(--app-space-1);
+}
+
+.desktop-nav .active {
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.spacer {
+  flex: 1;
+}
+
+.content {
+  flex: 1;
+}
+
+.footer {
+  padding: var(--app-space-4);
+  text-align: center;
+  font: var(--mat-sys-body-small);
+}
+
+// Mobile-first: da 768px in su mostriamo i link e nascondiamo il menu a tendina.
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex;
+  }
+
+  .mobile-menu-button {
+    display: none;
+  }
+}

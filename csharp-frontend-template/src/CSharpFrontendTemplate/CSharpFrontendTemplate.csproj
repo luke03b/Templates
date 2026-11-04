@@ -1,0 +1,28 @@
+<!--
+  Progetto Blazor WebAssembly "standalone": l'app C# viene compilata in assembly .NET
+  eseguiti nel browser dal runtime WebAssembly. Il risultato di `dotnet publish` è una
+  cartella di file statici (publish/wwwroot) servibile da qualsiasi web server (qui nginx).
+  TargetFramework, Nullable, TreatWarningsAsErrors... arrivano da ../../Directory.Build.props.
+-->
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <RootNamespace>CSharpFrontendTemplate</RootNamespace>
+    <!-- Sostituisce i segnaposto #[.{fingerprint}] e l'importmap in index.html (novità .NET 9/10). -->
+    <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+    <!-- Dev server usato solo da `dotnet run`/`dotnet watch`: non finisce nel publish. -->
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" PrivateAssets="all" />
+    <!-- QuickGrid: griglia/tabella ufficiale Microsoft per Blazor (ordinamento, paginazione). -->
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Permette ai test (bUnit) di vedere i membri "internal". -->
+    <InternalsVisibleTo Include="CSharpFrontendTemplate.Tests" />
+  </ItemGroup>
+
+</Project>

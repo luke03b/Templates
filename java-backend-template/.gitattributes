@@ -1,0 +1,5 @@
+# Line ending fissi per gli script del Maven Wrapper: mvnw deve avere LF (altrimenti fallisce su Linux/macOS
+# e nel container Docker), mvnw.cmd CRLF per Windows.
+mvnw text eol=lf
+*.cmd text eol=crlf
+*.java text eol=lf

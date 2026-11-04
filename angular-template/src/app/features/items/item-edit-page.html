@@ -1,0 +1,33 @@
+<div class="app-container">
+  <app-page-header
+    [title]="isEdit() ? 'Edit item' : 'New item'"
+    [subtitle]="isEdit() ? 'PUT /api/items/' + id() : 'POST /api/items'"
+  />
+
+  @if (loading()) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading item" />
+  } @else {
+    <div class="app-stack">
+      @if (error(); as error) {
+        <app-alert kind="error" [title]="error.title">
+          {{ error.detail ?? error.message }}
+          <button alertActions matButton (click)="cancel()">Back to items</button>
+        </app-alert>
+      }
+      @if (!isEdit() || item()) {
+        <mat-card appearance="outlined">
+          <mat-card-content>
+            <app-item-form
+              [item]="item()"
+              [serverErrors]="serverErrors()"
+              [saving]="saving()"
+              [submitLabel]="isEdit() ? 'Save changes' : 'Create item'"
+              (save)="save($event)"
+              (cancelled)="cancel()"
+            />
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</div>

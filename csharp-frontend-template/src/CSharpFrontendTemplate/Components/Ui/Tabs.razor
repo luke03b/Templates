@@ -1,0 +1,87 @@
+@* Tabs: contenitore di schede. I figli <TabPanel Title="..."> si registrano tramite
+   CascadingValue (un valore "passato a cascata" a tutti i discendenti senza parametri espliciti).
+   Esempio: <Tabs><TabPanel Title="Uno">...</TabPanel><TabPanel Title="Due">...</TabPanel></Tabs> *@
+
+<div class="tabs">
+    <div class="tab-list" role="tablist" @onkeydown="OnKeyDown">
+        @foreach (var panel in _panels)
+        {
+            var selected = panel == ActivePanel;
+            <button type="button"
+                    role="tab"
+                    id="@TabId(panel)"
+                    class="@UiCss.Join("tab", selected ? "tab-active" : null)"
+                    aria-selected="@(selected ? "true" : "false")"
+                    aria-controls="@PanelId(panel)"
+                    tabindex="@(selected ? 0 : -1)"
+                    @onclick="() => Activate(panel)">
+                @panel.Title
+            </button>
+        }
+    </div>
+    <CascadingValue Value="this" IsFixed="true">
+        @ChildContent
+    </CascadingValue>
+</div>
+
+@code {
+    private readonly List<TabPanel> _panels = [];
+    private readonly string _idPrefix = $"tabs-{Guid.NewGuid():N}";
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public EventCallback<string> OnTabChanged { get; set; }
+
+    public TabPanel? ActivePanel { get; private set; }
+
+    internal string TabId(TabPanel panel) => $"{_idPrefix}-tab-{_panels.IndexOf(panel)}";
+
+    internal string PanelId(TabPanel panel) => $"{_idPrefix}-panel-{_panels.IndexOf(panel)}";
+
+    internal void Register(TabPanel panel)
+    {
+        _panels.Add(panel);
+        ActivePanel ??= panel;
+        StateHasChanged();
+    }
+
+    internal void Unregister(TabPanel panel)
+    {
+        _panels.Remove(panel);
+        if (ActivePanel == panel)
+        {
+            ActivePanel = _panels.FirstOrDefault();
+        }
+
+        StateHasChanged();
+    }
+
+    private void Activate(TabPanel panel)
+    {
+        if (ActivePanel == panel)
+        {
+            return;
+        }
+
+        ActivePanel = panel;
+        _ = OnTabChanged.InvokeAsync(panel.Title);
+    }
+
+    // Frecce sinistra/destra per cambiare scheda (pattern WAI-ARIA "Tabs").
+    private void OnKeyDown(KeyboardEventArgs e)
+    {
+        if (ActivePanel is null || _panels.Count == 0)
+        {
+            return;
+        }
+
+        var index = _panels.IndexOf(ActivePanel);
+        var next = e.Key switch
+        {
+            "ArrowRight" => (index + 1) % _panels.Count,
+            "ArrowLeft" => (index - 1 + _panels.Count) % _panels.Count,
+            _ => index,
+        };
+        Activate(_panels[next]);
+    }
+}

@@ -1,11 +1,13 @@
+"""Router di `GET /api/health`: usato da healthcheck Docker, load balancer e frontend."""
+
 from fastapi import APIRouter
 
+from app.api.dependencies import HealthServiceDep
 from app.schemas.health import HealthResponse
-from app.services.health_service import get_health_status
 
-router = APIRouter(tags=["health"])
+router = APIRouter(prefix="/health", tags=["health"])
 
 
-@router.get("/health", response_model=HealthResponse)
-def health() -> HealthResponse:
-    return get_health_status()
+@router.get("", summary="Service health status")
+def get_health(service: HealthServiceDep) -> HealthResponse:
+    return service.get_status()

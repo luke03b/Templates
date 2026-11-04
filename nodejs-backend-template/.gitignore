@@ -1,4 +1,15 @@
+# Dipendenze installate da npm (si rigenerano con "npm ci")
 node_modules/
+
+# Report di coverage generati da "npm run coverage"
 coverage/
+
+# Variabili d'ambiente locali (possono contenere segreti): si committa solo .env.example
 .env
+.env.*
+!.env.example
+
+# Log e file temporanei
 npm-debug.log*
+*.log
+.DS_Store

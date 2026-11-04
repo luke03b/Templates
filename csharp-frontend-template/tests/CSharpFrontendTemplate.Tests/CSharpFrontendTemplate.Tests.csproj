@@ -1,0 +1,32 @@
+<!--
+  Progetto di test: xUnit v3 (framework di test) + bUnit (rendering dei componenti Blazor in memoria,
+  senza browser). Usa Microsoft.NET.Sdk.Razor per poter scrivere anche test in sintassi .razor.
+-->
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <!-- xUnit v3 compila i test come eseguibile, eseguito da Microsoft.Testing.Platform (vedi global.json). -->
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CSharpFrontendTemplate.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="bunit" />
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
+    <!-- Copertura del codice (estensione ufficiale di Microsoft.Testing.Platform), vedi README. -->
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CSharpFrontendTemplate\CSharpFrontendTemplate.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Bunit" />
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

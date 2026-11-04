@@ -1,0 +1,51 @@
+# Configurazione principale (comune a tutti i profili).
+# La sintassi ${VAR:default} legge la variabile d'ambiente VAR, con un default se non è impostata.
+# Profili: "dev" (default in locale, vedi application-dev.yml) e "prod" (usato nel container Docker,
+# vedi application-prod.yml). Si sceglie con SPRING_PROFILES_ACTIVE=prod.
+
+spring:
+  application:
+    name: java-backend-template
+  profiles:
+    # Profilo usato quando SPRING_PROFILES_ACTIVE non è impostata.
+    default: dev
+  config:
+    # Importa un eventuale file .env nella cartella di avvio (formato KEY=VALUE), se presente.
+    import: optional:file:.env[.properties]
+
+server:
+  port: ${PORT:8080}
+  # Chiusura "gentile": allo stop termina le richieste in corso prima di spegnersi.
+  shutdown: graceful
+
+app:
+  cors:
+    allowed-origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:4200,http://localhost:5200,http://localhost:5300,http://localhost:8081,http://localhost:8082,http://localhost:8083,http://localhost:8084}
+
+logging:
+  level:
+    # Valori accettati: debug, info, warn, error (anche maiuscoli).
+    root: ${LOG_LEVEL:info}
+
+# Actuator: endpoint operativi interni, non parte del contratto API pubblico.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      # /actuator/health/liveness e /actuator/health/readiness (utili anche in Kubernetes).
+      probes:
+        enabled: true
+
+# springdoc: Swagger UI su /swagger-ui.html, specifica OpenAPI su /v3/api-docs.
+# Abilitati esplicitamente (anche in prod, è un template); per disattivarli: SPRINGDOC_API_DOCS_ENABLED=false
+# e SPRINGDOC_SWAGGER_UI_ENABLED=false.
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha

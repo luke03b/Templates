@@ -1,0 +1,34 @@
+<form [formGroup]="form" (ngSubmit)="submit()" novalidate class="app-stack">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" [maxlength]="limits.nameMax" required />
+    <mat-hint align="end">{{ form.controls.name.value.length }} / {{ limits.nameMax }}</mat-hint>
+    <mat-error>{{ form.controls.name.errors | errorMessage }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <textarea
+      matInput
+      formControlName="description"
+      rows="3"
+      [maxlength]="limits.descriptionMax"
+    ></textarea>
+    <mat-hint align="end">
+      {{ form.controls.description.value.length }} / {{ limits.descriptionMax }}
+    </mat-hint>
+    <mat-error>{{ form.controls.description.errors | errorMessage }}</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Price</mat-label>
+    <input matInput type="number" formControlName="price" min="0" step="0.01" required />
+    <span matTextSuffix>EUR</span>
+    <mat-error>{{ form.controls.price.errors | errorMessage }}</mat-error>
+  </mat-form-field>
+
+  <div class="app-row actions">
+    <button matButton type="button" (click)="cancelled.emit()">Cancel</button>
+    <app-loading-button type="submit" [loading]="saving()">{{ submitLabel() }}</app-loading-button>
+  </div>
+</form>

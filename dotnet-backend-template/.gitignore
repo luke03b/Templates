@@ -1,5 +1,22 @@
+# Output di build .NET
 bin/
 obj/
+artifacts/
+publish/
+
+# Test e coverage
+TestResults/
+coverage/
+*.coverage
+*.trx
+
+# Configurazione locale (copiare da .env.example)
+.env
+
+# IDE
 .vs/
 .idea/
-.vscode/
+.vscode/*
+!.vscode/extensions.json
+*.user
+*.suo

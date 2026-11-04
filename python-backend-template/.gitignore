@@ -1,6 +1,28 @@
-__pycache__/
-.pytest_cache/
+# Ambienti virtuali e cache di Python
 .venv/
-.env
+venv/
+__pycache__/
+*.py[cod]
+
+# Cache dei tool
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Report di coverage
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Build
 dist/
 build/
+*.egg-info/
+
+# Configurazione locale (contiene valori personali o segreti)
+.env
+
+# Editor / sistema operativo
+.idea/
+.DS_Store

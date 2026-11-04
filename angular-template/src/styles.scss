@@ -1,0 +1,161 @@
+// =============================================================================
+// TEMA E DESIGN TOKEN (file unico)
+// -----------------------------------------------------------------------------
+// Qui vivono TUTTI i valori visivi dell'app:
+//   1. il tema Angular Material 3 (colori, tipografia, densita') -> variabili --mat-sys-*
+//   2. i token dell'app (spaziature, raggi, colori semantici extra) -> variabili --app-*
+//   3. poche utility globali (tipografia, layout, toast).
+// I componenti usano solo var(--mat-sys-*) e var(--app-*): per cambiare look si tocca solo
+// questo file. Niente gradienti, glow o colori neon (vedi frontend-guidelines).
+// Guida: https://material.angular.dev/guide/theming
+// =============================================================================
+@use '@angular/material' as mat;
+
+html {
+  // mat.theme() genera le variabili CSS --mat-sys-* (Material 3) usate da tutti i componenti.
+  // Palette disponibili: mat.$azure-palette, $blue-palette, $green-palette, $violet-palette, ...
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: (
+        plain-family: var(--app-font-family),
+        brand-family: var(--app-font-family),
+      ),
+      density: 0,
+    )
+  );
+
+  // "light" fisso; usa "light dark" per seguire il tema del sistema operativo, o "dark".
+  // I token qui sotto usano light-dark(), quindi funzionano in entrambi i casi.
+  color-scheme: light;
+}
+
+:root {
+  // --- Tipografia ------------------------------------------------------------
+  --app-font-family: Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --app-font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  // --- Spaziature (scala da 4px) --------------------------------------------
+  --app-space-1: 4px;
+  --app-space-2: 8px;
+  --app-space-3: 12px;
+  --app-space-4: 16px;
+  --app-space-5: 24px;
+  --app-space-6: 32px;
+  --app-space-7: 48px;
+
+  // --- Forme e layout --------------------------------------------------------
+  --app-radius-sm: 8px;
+  --app-radius-md: 12px;
+  --app-radius-lg: 16px;
+  --app-content-max-width: 1120px;
+  --app-toolbar-height: 64px;
+
+  // --- Colori semantici non coperti da Material (success / warning / info) ---
+  // L'errore usa --mat-sys-error del tema.
+  --app-color-success: light-dark(#1e7d32, #7fd88a);
+  --app-color-success-container: light-dark(#e3f4e4, #12391a);
+  --app-color-on-success-container: light-dark(#0b3d12, #c8f0cb);
+  --app-color-warning: light-dark(#a15c00, #ffb95c);
+  --app-color-warning-container: light-dark(#fff1dc, #4a2c00);
+  --app-color-on-warning-container: light-dark(#4a2a00, #ffdcae);
+  --app-color-info: light-dark(#005fb0, #9ecaff);
+  --app-color-info-container: light-dark(#e2eeff, #00325b);
+  --app-color-on-info-container: light-dark(#002a52, #d3e4ff);
+}
+
+// --- Base ------------------------------------------------------------------
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-large);
+}
+
+a {
+  color: var(--mat-sys-primary);
+}
+
+// --- Utility tipografiche (mappano la scala tipografica Material 3) ---------
+.app-text-display {
+  font: var(--mat-sys-display-small);
+}
+.app-text-headline {
+  font: var(--mat-sys-headline-medium);
+}
+.app-text-title {
+  font: var(--mat-sys-title-large);
+}
+.app-text-body {
+  font: var(--mat-sys-body-large);
+}
+.app-text-label {
+  font: var(--mat-sys-label-large);
+}
+.app-text-muted {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+// --- Utility di layout --------------------------------------------------------
+.app-container {
+  width: 100%;
+  max-width: var(--app-content-max-width);
+  margin-inline: auto;
+  padding: var(--app-space-5) var(--app-space-4);
+}
+
+.app-stack {
+  display: grid;
+  gap: var(--app-space-4);
+}
+
+.app-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--app-space-3);
+}
+
+// --- Bottone "pericoloso" (es. Elimina) tramite i design token di Material ---
+.app-button-danger {
+  @include mat.button-overrides(
+    (
+      filled-container-color: var(--mat-sys-error),
+      filled-label-text-color: var(--mat-sys-on-error),
+      text-label-text-color: var(--mat-sys-error),
+    )
+  );
+}
+
+// --- Toast (MatSnackBar) colorati per tipo: vedi NotificationService ----------
+.app-snackbar-success {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: var(--app-color-success-container),
+      supporting-text-color: var(--app-color-on-success-container),
+      button-color: var(--app-color-on-success-container),
+    )
+  );
+}
+
+.app-snackbar-error {
+  @include mat.snack-bar-overrides(
+    (
+      container-color: var(--mat-sys-error-container),
+      supporting-text-color: var(--mat-sys-on-error-container),
+      button-color: var(--mat-sys-on-error-container),
+    )
+  );
+}

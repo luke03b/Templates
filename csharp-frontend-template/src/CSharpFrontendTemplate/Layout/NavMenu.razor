@@ -1,0 +1,55 @@
+@* NavMenu: barra di navigazione responsive (mobile-first). Sotto i 768px i link stanno in un
+   menu a scomparsa aperto dal bottone "hamburger"; da 768px in su sono sempre visibili (CSS).
+   NavLink aggiunge la classe "active" al link della pagina corrente. *@
+@implements IDisposable
+@inject NavigationManager Navigation
+
+<header class="navbar">
+    <div class="container navbar-inner">
+        <a class="navbar-brand" href="">CSharp Frontend</a>
+        <button type="button"
+                class="navbar-toggle"
+                aria-controls="main-nav"
+                aria-expanded="@(_isOpen ? "true" : "false")"
+                aria-label="Toggle navigation"
+                @onclick="Toggle">
+            <span class="navbar-toggle-bar"></span>
+            <span class="navbar-toggle-bar"></span>
+            <span class="navbar-toggle-bar"></span>
+        </button>
+        <nav id="main-nav" class="@UiCss.Join("navbar-links", _isOpen ? "is-open" : null)" aria-label="Main">
+            @foreach (var link in Links)
+            {
+                <NavLink class="navbar-link" href="@link.Href" Match="@link.Match">@link.Text</NavLink>
+            }
+        </nav>
+    </div>
+</header>
+
+@code {
+    // Per aggiungere una voce di menu basta aggiungere una riga qui.
+    private static readonly (string Href, string Text, NavLinkMatch Match)[] Links =
+    [
+        ("", "Home", NavLinkMatch.All),
+        ("components", "Components", NavLinkMatch.Prefix),
+        ("items", "Items", NavLinkMatch.Prefix),
+    ];
+
+    private bool _isOpen;
+
+    // Chiude il menu mobile dopo ogni navigazione.
+    protected override void OnInitialized() => Navigation.LocationChanged += OnLocationChanged;
+
+    private void Toggle() => _isOpen = !_isOpen;
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        if (_isOpen)
+        {
+            _isOpen = false;
+            _ = InvokeAsync(StateHasChanged);
+        }
+    }
+
+    public void Dispose() => Navigation.LocationChanged -= OnLocationChanged;
+}

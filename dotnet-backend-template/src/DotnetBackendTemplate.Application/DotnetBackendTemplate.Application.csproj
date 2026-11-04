@@ -1,10 +1,14 @@
+<!--
+  Application: logica di business (service), modelli di dominio e interfacce dei repository.
+  Non conosce HTTP ne il tipo di storage: dipende solo da Contracts.
+-->
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+  <ItemGroup>
+    <!-- Abstractions = solo le interfacce di DI e logging, senza le implementazioni. -->
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DotnetBackendTemplate.Contracts\DotnetBackendTemplate.Contracts.csproj" />

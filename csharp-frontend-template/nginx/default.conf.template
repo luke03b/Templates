@@ -1,0 +1,55 @@
+# Configurazione nginx (template). All'avvio l'immagine ufficiale nginx sostituisce ${API_UPSTREAM}
+# con il valore della variabile d'ambiente (envsubst) e salva il risultato in /etc/nginx/conf.d/.
+# Le variabili nginx come $uri non vengono toccate.
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # DNS interno di Docker. Con una VARIABILE in proxy_pass nginx risolve l'host a ogni richiesta
+    # (cache 10s) invece che all'avvio: il container parte anche se il backend non esiste ancora.
+    resolver 127.0.0.11 valid=10s ipv6=off;
+    set $api_upstream ${API_UPSTREAM};
+
+    # Compressione: gzip_static serve i file .gz già creati da `dotnet publish` (niente CPU a runtime);
+    # gzip comprime al volo gli altri. I .br non servono: il modulo brotli non è nell'immagine ufficiale.
+    gzip on;
+    gzip_static on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/css application/javascript application/json application/wasm application/octet-stream image/svg+xml;
+
+    # Health check del container (usato da HEALTHCHECK nel Dockerfile).
+    location = /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "ok\n";
+    }
+
+    # Reverse proxy verso il backend: /api/items -> ${API_UPSTREAM}/api/items.
+    location /api/ {
+        proxy_pass $api_upstream;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_connect_timeout 5s;
+        proxy_read_timeout 30s;
+    }
+
+    # Runtime .NET e assembly (.wasm, .dat, .js): i nomi contengono un hash (fingerprint),
+    # quindi si possono mettere in cache "per sempre". Se un file manca: 404, non index.html.
+    # application/wasm è già in mime.types; .dat (dati ICU) ricade su application/octet-stream.
+    location /_framework/ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    # index.html, appsettings*.json, css: senza hash nel nome -> rivalidare sempre (ETag).
+    location / {
+        try_files $uri $uri/ /index.html;
+        add_header Cache-Control "no-cache";
+    }
+}

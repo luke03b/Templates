@@ -1,0 +1,219 @@
+@* Items: pagina CRUD completa su /api/items. La pagina orchestra il flusso (carica, apre la
+   modale, salva, conferma l'eliminazione); l'HTTP è delegato a IApiClient, la UI ai componenti. *@
+@page "/items"
+@inject IApiClient Api
+@inject ToastService Toasts
+
+<PageTitle>Items · CSharp Frontend Template</PageTitle>
+
+<div class="page-header">
+    <div>
+        <h1>Items</h1>
+        <p class="text-muted">Example CRUD against <code>/api/items</code>.</p>
+    </div>
+    <div class="page-header-actions">
+        <AppButton Variant="ButtonVariant.Secondary" OnClick="LoadAsync" Loading="_loading">Refresh</AppButton>
+        <AppButton OnClick="OpenCreate">New item</AppButton>
+    </div>
+</div>
+
+@if (_loadError is not null)
+{
+    <Alert Tone="Tone.Danger" Title="Could not load items">
+        @_loadError
+        <div class="mt-2"><AppButton Size="ButtonSize.Small" Variant="ButtonVariant.Secondary" OnClick="LoadAsync">Try again</AppButton></div>
+    </Alert>
+}
+else if (_items is null)
+{
+    <div class="loading-block"><Spinner /> <span>Loading items...</span></div>
+}
+else if (_items.Count == 0)
+{
+    <Card>
+        <div class="empty-state">
+            <h2>No items yet</h2>
+            <p>Create the first one to get started.</p>
+            <AppButton OnClick="OpenCreate">New item</AppButton>
+        </div>
+    </Card>
+}
+else
+{
+    <div class="table-wrapper">
+        <QuickGrid Items="_itemsQuery" Pagination="_pagination" Class="table" TGridItem="Item">
+            <PropertyColumn Property="i => i.Name" Title="Name" Sortable="true" />
+            <PropertyColumn Property="i => i.Description" Title="Description" />
+            <PropertyColumn Property="i => i.Price" Title="Price" Format="N2" Sortable="true" Align="Align.End" />
+            <PropertyColumn Property="i => i.UpdatedAt" Title="Updated" Format="yyyy-MM-dd HH:mm" Sortable="true" />
+            <TemplateColumn Title="Actions" Align="Align.End" Context="item">
+                <div class="table-actions">
+                    <AppButton Size="ButtonSize.Small" Variant="ButtonVariant.Secondary" OnClick="() => OpenEdit(item)" aria-label="@($"Edit {item.Name}")">Edit</AppButton>
+                    <AppButton Size="ButtonSize.Small" Variant="ButtonVariant.Danger" OnClick="() => _deleteTarget = item" aria-label="@($"Delete {item.Name}")">Delete</AppButton>
+                </div>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+    <Paginator State="_pagination" />
+}
+
+<Modal IsOpen="_editorOpen" IsOpenChanged="OnEditorOpenChanged" Title="@(_editing is null ? "New item" : "Edit item")">
+    <ItemForm @ref="_itemForm"
+              Model="_formModel"
+              Saving="_saving"
+              ErrorMessage="_formError"
+              SubmitLabel="@(_editing is null ? "Create" : "Save changes")"
+              OnValidSubmit="SaveAsync"
+              OnCancel="CloseEditor" />
+</Modal>
+
+<Modal IsOpen="_deleteTarget is not null" IsOpenChanged="open => { if (!open) _deleteTarget = null; }" Title="Delete item">
+    <ChildContent>
+        <p>Are you sure you want to delete <strong>@_deleteTarget?.Name</strong>? This action cannot be undone.</p>
+    </ChildContent>
+    <Footer>
+        <AppButton Variant="ButtonVariant.Secondary" OnClick="() => _deleteTarget = null" Disabled="_deleting">Cancel</AppButton>
+        <AppButton Variant="ButtonVariant.Danger" OnClick="DeleteAsync" Loading="_deleting">Delete</AppButton>
+    </Footer>
+</Modal>
+
+@code {
+    private readonly PaginationState _pagination = new() { ItemsPerPage = 10 };
+
+    private IReadOnlyList<Item>? _items;
+    private IQueryable<Item>? _itemsQuery;
+    private bool _loading;
+    private string? _loadError;
+
+    private bool _editorOpen;
+    private Item? _editing;
+    private ItemInput _formModel = new();
+    private ItemForm? _itemForm;
+    private bool _saving;
+    private string? _formError;
+
+    private Item? _deleteTarget;
+    private bool _deleting;
+
+    protected override Task OnInitializedAsync() => LoadAsync();
+
+    private async Task LoadAsync()
+    {
+        _loading = true;
+        _loadError = null;
+        try
+        {
+            SetItems(await Api.GetItemsAsync());
+        }
+        catch (ApiException ex)
+        {
+            _loadError = ex.Message;
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
+
+    private void SetItems(IReadOnlyList<Item> items)
+    {
+        _items = items;
+        // QuickGrid lavora su IQueryable: ordinamento e paginazione avvengono in memoria.
+        _itemsQuery = items.AsQueryable();
+    }
+
+    private void OpenCreate() => OpenEditor(null);
+
+    private void OpenEdit(Item item) => OpenEditor(item);
+
+    private void OpenEditor(Item? item)
+    {
+        _editing = item;
+        // Nuova istanza = nuovo EditContext: niente errori residui dalla volta precedente.
+        _formModel = item is null ? new ItemInput() : ItemInput.FromItem(item);
+        _formError = null;
+        _editorOpen = true;
+    }
+
+    private void CloseEditor() => _editorOpen = false;
+
+    private void OnEditorOpenChanged(bool open)
+    {
+        if (!open && !_saving)
+        {
+            CloseEditor();
+        }
+    }
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        _formError = null;
+        try
+        {
+            if (_editing is null)
+            {
+                var created = await Api.CreateItemAsync(_formModel);
+                Toasts.ShowSuccess($"Item \"{created.Name}\" created.");
+            }
+            else
+            {
+                var updated = await Api.UpdateItemAsync(_editing.Id, _formModel);
+                Toasts.ShowSuccess($"Item \"{updated.Name}\" updated.");
+            }
+
+            CloseEditor();
+            await LoadAsync();
+        }
+        catch (ApiException ex) when (ex.IsValidationError)
+        {
+            // 400 Problem Details: errori mostrati sotto ai rispettivi campi.
+            _itemForm?.ShowServerErrors(ex.ValidationErrors);
+            _formError = ex.Problem?.Detail;
+        }
+        catch (ApiException ex) when (ex.IsNotFound)
+        {
+            CloseEditor();
+            Toasts.ShowError("This item no longer exists.");
+            await LoadAsync();
+        }
+        catch (ApiException ex)
+        {
+            _formError = ex.Message;
+        }
+        finally
+        {
+            _saving = false;
+        }
+    }
+
+    private async Task DeleteAsync()
+    {
+        if (_deleteTarget is not { } target)
+        {
+            return;
+        }
+
+        _deleting = true;
+        try
+        {
+            await Api.DeleteItemAsync(target.Id);
+            Toasts.ShowSuccess($"Item \"{target.Name}\" deleted.");
+        }
+        catch (ApiException ex) when (ex.IsNotFound)
+        {
+            Toasts.ShowError("This item had already been deleted.");
+        }
+        catch (ApiException ex)
+        {
+            Toasts.ShowError(ex.Message);
+        }
+        finally
+        {
+            _deleting = false;
+            _deleteTarget = null;
+        }
+
+        await LoadAsync();
+    }
+}

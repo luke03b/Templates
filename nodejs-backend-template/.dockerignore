@@ -1,0 +1,21 @@
+# Tutto cio' che non serve per eseguire l'app resta fuori dal contesto di build Docker:
+# build piu' veloci e nessun segreto (.env) copiato nell'immagine.
+node_modules
+coverage
+tests
+.git
+.gitignore
+.vscode
+.env
+.env.*
+!.env.example
+*.log
+Dockerfile
+.dockerignore
+README.md
+eslint.config.js
+.prettierrc.json
+.prettierignore
+.c8rc.json
+.editorconfig
+jsconfig.json

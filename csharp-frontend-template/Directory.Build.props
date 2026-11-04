@@ -1,0 +1,24 @@
+<!--
+  Directory.Build.props: impostazioni MSBuild applicate AUTOMATICAMENTE a tutti i progetti
+  (.csproj) che si trovano in questa cartella o nelle sottocartelle.
+  Così app e test condividono le stesse regole di qualità senza ripeterle.
+-->
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <!-- Nullable reference types: il compilatore segnala i possibili NullReferenceException. -->
+    <Nullable>enable</Nullable>
+    <!-- Implicit usings: System, System.Linq, System.Net.Http... importati automaticamente. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Ogni warning diventa errore: il template deve compilare con zero warning. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Applica in build le regole di stile di .editorconfig (le stesse di `dotnet format`). -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <!-- Necessario perché alcune regole IDE (es. IDE0005 using inutili) funzionino in build. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- CS1591: "manca il commento XML" su ogni membro pubblico: troppo rumoroso per un template. -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,60 @@
+@* FormField: involucro standard per un campo di form: etichetta, input (ChildContent),
+   testo d'aiuto e messaggio di validazione. Funziona con QUALSIASI input di Blazor
+   (InputText, InputNumber, InputSelect, InputTextArea, InputRadioGroup, InputSwitch...).
+   @typeparam TValue: componente "generico"; TValue viene dedotto dall'espressione For.
+   Esempio:
+     <FormField Label="Name" InputId="name" For="() => model.Name">
+         <InputText id="name" class="input" @bind-Value="model.Name" />
+     </FormField> *@
+@typeparam TValue
+
+@if (Fieldset)
+{
+    <fieldset class="field">
+        <legend class="field-label">@Label@RequiredMark</legend>
+        @ChildContent
+        @FieldFooter
+    </fieldset>
+}
+else
+{
+    <div class="field">
+        @if (Label is not null)
+        {
+            <label class="field-label" for="@InputId">@Label@RequiredMark</label>
+        }
+        @ChildContent
+        @FieldFooter
+    </div>
+}
+
+@code {
+    [Parameter] public string? Label { get; set; }
+
+    /// <summary>Id dell'input, per collegare &lt;label for&gt; e input (click sull'etichetta = focus).</summary>
+    [Parameter] public string? InputId { get; set; }
+
+    /// <summary>Proprietà del modello: serve a mostrare i suoi messaggi di validazione.</summary>
+    [Parameter, EditorRequired] public Expression<Func<TValue>> For { get; set; } = default!;
+
+    [Parameter] public string? Hint { get; set; }
+
+    [Parameter] public bool Required { get; set; }
+
+    /// <summary>true per gruppi (radio, checkbox multipli): usa &lt;fieldset&gt;/&lt;legend&gt;.</summary>
+    [Parameter] public bool Fieldset { get; set; }
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    private RenderFragment? RequiredMark => Required
+        ? @<span class="field-required" aria-hidden="true"> *</span>
+        : null;
+
+    private RenderFragment FieldFooter => @<text>
+        @if (Hint is not null)
+        {
+            <p class="field-hint">@Hint</p>
+        }
+        <ValidationMessage For="For" />
+    </text>;
+}

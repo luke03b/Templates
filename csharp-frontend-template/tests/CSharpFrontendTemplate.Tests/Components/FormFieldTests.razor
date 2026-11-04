@@ -1,0 +1,53 @@
+@* Test di FormField e InputSwitch scritti in Razor: il markup del test è identico
+   a quello che si scriverebbe in una pagina, quindi è facile da leggere e copiare. *@
+@inherits UiTestContext
+
+@code {
+    [Fact]
+    public void RendersLabelHintAndRequiredMark()
+    {
+        var model = new DemoFormModel();
+
+        var cut = Render(@<EditForm Model="model">
+            <FormField Label="Email" InputId="email" Hint="We never share it." Required="true" For="() => model.Email">
+                <InputText id="email" class="input" @bind-Value="model.Email" />
+            </FormField>
+        </EditForm>);
+
+        Assert.Equal("email", cut.Find("label").GetAttribute("for"));
+        Assert.Contains("Email", cut.Find("label").TextContent);
+        Assert.NotNull(cut.Find(".field-required"));
+        Assert.Equal("We never share it.", cut.Find(".field-hint").TextContent);
+    }
+
+    [Fact]
+    public void FieldsetMode_UsesLegend()
+    {
+        var model = new DemoFormModel();
+
+        var cut = Render(@<EditForm Model="model">
+            <FormField Label="Plan" For="() => model.Plan" Fieldset="true">
+                <InputRadioGroup @bind-Value="model.Plan">
+                    <InputRadio Value="@("free")" />
+                </InputRadioGroup>
+            </FormField>
+        </EditForm>);
+
+        Assert.Equal("Plan", cut.Find("fieldset > legend").TextContent);
+    }
+
+    [Fact]
+    public void InputSwitch_UpdatesBoundValue()
+    {
+        var model = new DemoFormModel();
+
+        var cut = Render(@<EditForm Model="model">
+            <InputSwitch @bind-Value="model.Newsletter" Label="Newsletter" />
+        </EditForm>);
+
+        cut.Find("input[role=switch]").Change(true);
+
+        Assert.True(model.Newsletter);
+        Assert.Equal("Newsletter", cut.Find(".switch-label").TextContent);
+    }
+}

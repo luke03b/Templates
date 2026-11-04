@@ -1,24 +1,25 @@
+// Punto di ingresso: solo bootstrap (URL strategy, dipendenze, root widget).
+// Nessuna logica applicativa qui.
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
-import 'screens/landing_page.dart';
+import 'app.dart';
+import 'data/api/api_client.dart';
+import 'data/repositories/health_repository.dart';
+import 'data/repositories/items_repository.dart';
 
 void main() {
-  runApp(const TemplateApp());
-}
+  // Web: URL senza '#' (/items invece di /#/items). nginx fa il fallback
+  // su index.html. Su Android/iOS non ha effetto.
+  usePathUrlStrategy();
 
-class TemplateApp extends StatelessWidget {
-  const TemplateApp({super.key});
+  // Un solo ApiClient condiviso da tutti i repository.
+  final apiClient = ApiClient();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Template',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2563EB)),
-        useMaterial3: true,
-      ),
-      home: const LandingPage(),
-    );
-  }
+  runApp(
+    App(
+      healthRepository: HttpHealthRepository(apiClient),
+      itemsRepository: HttpItemsRepository(apiClient),
+    ),
+  );
 }

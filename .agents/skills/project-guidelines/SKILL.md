@@ -29,6 +29,7 @@ Quando lavori in questo progetto, segui queste regole in modo rigido:
    - Costanti: UPPER_SNAKE_CASE.
    - File e cartelle: segui la convenzione del linguaggio o framework usato nel progetto.
    - Namespace e package: usa nomi descrittivi e stabili legati al dominio.
+   - Se la convenzione ufficiale del linguaggio è diversa, vince quella del linguaggio (es. snake_case per funzioni e variabili in Python secondo PEP 8, costanti in PascalCase in C#/.NET). Nei JSON delle API i campi restano sempre in camelCase.
 
 4. Mantieni la formattazione leggibile e locale al file.
    - Evita refactor di stile non necessari.
@@ -48,6 +49,10 @@ Quando lavori in questo progetto, segui queste regole in modo rigido:
 7. Usa configurazione esterna quando disponibile.
    - Variabili ambiente e file di configurazione per valori runtime.
    - Health check e orchestration a livello di deployment, non dentro la logica di business.
+
+8. Rispetta il contratto API comune.
+   - Tutti i backend espongono le stesse rotte e tutti i frontend le consumano: il riferimento è `docs/api-contract.md` (rotte, campi, errori Problem Details, variabili d'ambiente, porte).
+   - Una modifica al contratto va fatta prima nel documento e poi in tutti i template.
 
 ## Best Practices
 

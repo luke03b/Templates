@@ -1,20 +1,35 @@
+# pubspec.yaml: manifesto del progetto Dart/Flutter (nome, versione,
+# vincoli sull'SDK, dipendenze). Equivale al package.json di Node.
 name: flutter_template
-description: Base Flutter template with a landing page.
+description: Flutter frontend template (web, Android, iOS) with routing, API client and CRUD example.
+# 'none' impedisce la pubblicazione accidentale su pub.dev.
 publish_to: 'none'
+# <versione semantica>+<build number> (usato da Android/iOS come versionCode).
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.4
+  # Dart 3.13 = Flutter 3.47 (stable di novembre 2026).
+  sdk: ^3.13.0
+  flutter: '>=3.47.0'
 
 dependencies:
   flutter:
     sdk: flutter
+  # Fornisce usePathUrlStrategy() per URL "puliti" sul web (/items invece di /#/items).
+  flutter_web_plugins:
+    sdk: flutter
 
-  cupertino_icons: ^1.0.8
+  # Routing dichiarativo ufficiale del team Flutter.
+  go_router: ^18.1.2
+  # Icone stile iOS usate da alcuni widget "adaptive" del framework.
+  cupertino_icons: ^2.0.0
+  # Client HTTP ufficiale del team Dart (include MockClient per i test).
+  http: ^1.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Regole di lint raccomandate dal team Flutter (vedi analysis_options.yaml).
   flutter_lints: ^6.0.0
 
 flutter:

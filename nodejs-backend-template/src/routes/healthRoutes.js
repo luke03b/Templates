@@ -1,9 +1,11 @@
-const express = require('express');
+// Rotte di /api/health.
+import { Router } from 'express';
 
-const { getHealth } = require('../controllers/healthController');
-
-const healthRouter = express.Router();
-
-healthRouter.get('/health', getHealth);
-
-module.exports = { healthRouter };
+/**
+ * @param {ReturnType<typeof import('../controllers/healthController.js').createHealthController>} healthController
+ */
+export function createHealthRouter(healthController) {
+  const router = Router();
+  router.get('/', healthController.getHealth);
+  return router;
+}

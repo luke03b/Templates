@@ -1,0 +1,14 @@
+# File esclusi dal contesto di build Docker (build piu' veloce, immagine pulita).
+node_modules
+dist
+coverage
+.angular
+out-tsc
+.git
+.gitignore
+.vscode
+.idea
+*.log
+Dockerfile
+.dockerignore
+README.md

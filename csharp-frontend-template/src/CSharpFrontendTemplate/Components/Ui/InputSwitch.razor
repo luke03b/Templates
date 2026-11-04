@@ -1,0 +1,22 @@
+@* InputSwitch: interruttore on/off. Eredita da InputBase<bool>, la classe base ufficiale
+   degli input Blazor: così si integra con EditForm, @bind-Value e la validazione.
+   Esempio: <InputSwitch @bind-Value="model.Newsletter" Label="Subscribe" /> *@
+@using System.Diagnostics.CodeAnalysis
+@inherits InputBase<bool>
+
+<label class="switch">
+    <input type="checkbox" role="switch" class="@CssClass" @bind="CurrentValue" @attributes="AdditionalAttributes" />
+    <span class="switch-track" aria-hidden="true"></span>
+    @if (Label is not null)
+    {
+        <span class="switch-label">@Label</span>
+    }
+</label>
+
+@code {
+    [Parameter] public string? Label { get; set; }
+
+    // Un checkbox non passa da stringa: questo metodo astratto non viene mai usato.
+    protected override bool TryParseValueFromString(string? value, out bool result, [NotNullWhen(false)] out string? validationErrorMessage)
+        => throw new NotSupportedException($"{nameof(InputSwitch)} does not parse strings.");
+}

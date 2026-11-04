@@ -1,0 +1,64 @@
+@* Modal: finestra di dialogo modale. Supporta il binding a due vie: <Modal @bind-IsOpen="open">.
+   Si chiude con il bottone "x", con il tasto Esc o cliccando sullo sfondo (se CloseOnBackdrop). *@
+
+@if (IsOpen)
+{
+    <div class="modal-backdrop" @onclick="OnBackdropClickAsync">
+        @* @onclick:stopPropagation evita che un click dentro la finestra arrivi allo sfondo. *@
+        <div class="modal"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="@_titleId"
+             tabindex="-1"
+             @ref="_dialog"
+             @onclick:stopPropagation="true"
+             @onkeydown="OnKeyDownAsync">
+            <header class="modal-header">
+                <h2 id="@_titleId" class="modal-title">@Title</h2>
+                <button type="button" class="modal-close" aria-label="Close" @onclick="CloseAsync">&times;</button>
+            </header>
+            <div class="modal-body">@ChildContent</div>
+            @if (Footer is not null)
+            {
+                <footer class="modal-footer">@Footer</footer>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private readonly string _titleId = $"modal-title-{Guid.NewGuid():N}";
+    private ElementReference _dialog;
+    private bool _shouldFocus;
+
+    [Parameter] public bool IsOpen { get; set; }
+
+    /// <summary>Convenzione Blazor: Parametro + "Changed" abilita @bind-IsOpen.</summary>
+    [Parameter] public EventCallback<bool> IsOpenChanged { get; set; }
+
+    [Parameter, EditorRequired] public string Title { get; set; } = string.Empty;
+
+    [Parameter] public bool CloseOnBackdrop { get; set; } = true;
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public RenderFragment? Footer { get; set; }
+
+    public Task CloseAsync() => IsOpenChanged.InvokeAsync(false);
+
+    protected override void OnParametersSet() => _shouldFocus = IsOpen;
+
+    // Dopo il render sposta il focus nella finestra, così Esc e Tab funzionano subito.
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_shouldFocus)
+        {
+            _shouldFocus = false;
+            await _dialog.FocusAsync();
+        }
+    }
+
+    private Task OnBackdropClickAsync() => CloseOnBackdrop ? CloseAsync() : Task.CompletedTask;
+
+    private Task OnKeyDownAsync(KeyboardEventArgs e) => e.Key == "Escape" ? CloseAsync() : Task.CompletedTask;
+}

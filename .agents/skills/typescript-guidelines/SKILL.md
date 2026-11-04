@@ -46,6 +46,12 @@ Produrre codice TypeScript tipizzato, modulare e testabile, indipendente dal fra
    - Scrivi unit test per funzioni pure e service.
    - Scrivi test di integrazione per i confini principali.
 
+## Uso nei template
+
+- `typescript-backend-template` è un backend TypeScript: Fastify, schemi TypeBox (che sono sia DTO sia validazione sia OpenAPI), Vitest per i test e Vite in modalità SSR per la build.
+- Node esegue i file `.ts` in modo nativo (type stripping): non usare `enum`, `namespace` o parameter properties nei costruttori, e negli import relativi scrivi l'estensione `.ts`.
+- I template frontend in TypeScript sono `react-template` e `angular-template`.
+
 ## Best Practices
 
 - Preferisci composizione e dipendenze esplicite.

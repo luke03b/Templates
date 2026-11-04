@@ -1,0 +1,103 @@
+/*
+  tokens.css: UNICO file dei design token (colori, spaziature, tipografia, raggi, ombre).
+  Tutti gli altri stili usano queste variabili CSS: per cambiare il look dell'app si modifica solo qui.
+  Il tema scuro ridefinisce i colori quando il sistema operativo è in dark mode.
+*/
+:root {
+  /* Colori di base */
+  --color-bg: #f7f7f8;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f1f2f4;
+  --color-border: #dcdfe4;
+  --color-text: #1b1d22;
+  --color-text-muted: #5c6270;
+  --color-focus: #4f46e5;
+
+  /* Colori semantici */
+  --color-primary: #4f46e5;
+  --color-primary-hover: #4338ca;
+  --color-on-primary: #ffffff;
+  --color-danger: #c62828;
+  --color-danger-hover: #a51f1f;
+  --color-on-danger: #ffffff;
+
+  --color-info-bg: #e8f1fd;
+  --color-info-fg: #174a8b;
+  --color-success-bg: #e6f4ea;
+  --color-success-fg: #1e6b34;
+  --color-warning-bg: #fdf3e1;
+  --color-warning-fg: #8a5300;
+  --color-danger-bg: #fdeaea;
+  --color-danger-fg: #9b1c1c;
+  --color-neutral-bg: #eceef1;
+  --color-neutral-fg: #3d424d;
+
+  --color-online: #1f9d55;
+  --color-offline: #d93025;
+  --color-checking: #9aa0a6;
+
+  /* Tipografia */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.75rem;
+  --font-size-2xl: 2.25rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 650;
+  --line-height: 1.55;
+
+  /* Spaziature (scala da 4px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* Forme, ombre, layout */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 999px;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+  --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
+  --container-max: 1120px;
+  --navbar-height: 60px;
+  --transition: 150ms ease;
+  --z-navbar: 10;
+  --z-modal: 100;
+  --z-toast: 200;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #121317;
+    --color-surface: #1b1d23;
+    --color-surface-muted: #23262d;
+    --color-border: #333741;
+    --color-text: #e8e9ec;
+    --color-text-muted: #a2a7b3;
+    --color-focus: #8b87f5;
+    --color-primary: #6d67ef;
+    --color-primary-hover: #8580f3;
+    --color-danger: #e05252;
+    --color-danger-hover: #e86b6b;
+    --color-info-bg: #16273d;
+    --color-info-fg: #9cc3f5;
+    --color-success-bg: #14301f;
+    --color-success-fg: #8fd3a5;
+    --color-warning-bg: #352812;
+    --color-warning-fg: #f0c77a;
+    --color-danger-bg: #3a1717;
+    --color-danger-fg: #f4a3a3;
+    --color-neutral-bg: #2a2d35;
+    --color-neutral-fg: #c9ccd3;
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.5);
+  }
+}

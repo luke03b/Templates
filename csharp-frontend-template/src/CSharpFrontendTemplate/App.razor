@@ -1,0 +1,9 @@
+@* App.razor: componente radice. Il Router legge l'attributo @page delle pagine e
+   mostra quella che corrisponde all'URL; NotFoundPage (novità .NET 10) per gli URL sconosciuti. *@
+<Router AppAssembly="typeof(App).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+    <Found Context="routeData">
+        <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)" />
+        @* Sposta il focus sull'h1 dopo ogni navigazione: utile per gli screen reader. *@
+        <FocusOnNavigate RouteData="routeData" Selector="h1" />
+    </Found>
+</Router>

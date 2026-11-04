@@ -1,0 +1,22 @@
+# Dipendenze e output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Configurazione locale (contiene valori specifici della macchina)
+.env
+.env.*
+!.env.example
+
+# Log e file di sistema
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

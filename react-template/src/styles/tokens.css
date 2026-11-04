@@ -1,0 +1,107 @@
+/*
+ * Design token: UNICO file con colori, spaziature, font, raggi e ombre dell'app.
+ * I componenti usano solo queste variabili CSS (var(--...)), mai valori "a mano":
+ * per cambiare il look dell'intera app basta modificare questo file.
+ * Il tema scuro ridefinisce solo i colori, in base alla preferenza del sistema operativo.
+ */
+:root {
+  /* Colori - superfici e testo */
+  --color-bg: #f7f7f5;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f0f0ed;
+  --color-border: #d9d9d4;
+  --color-border-strong: #b5b5ae;
+  --color-text: #1d1d1b;
+  --color-text-muted: #5c5c57;
+  --color-text-inverse: #ffffff;
+
+  /* Colori - azione principale e stati */
+  --color-primary: #1f5fbf;
+  --color-primary-hover: #194f9f;
+  --color-primary-soft: #e6eefa;
+  --color-success: #1e7a46;
+  --color-success-soft: #e3f3ea;
+  --color-warning: #8a5a00;
+  --color-warning-soft: #fbf0d9;
+  --color-danger: #b3261e;
+  --color-danger-hover: #931f19;
+  --color-danger-soft: #fbe7e6;
+  --color-info: #1f5fbf;
+  --color-info-soft: #e6eefa;
+  --color-focus: #1f5fbf;
+  --color-overlay: rgb(0 0 0 / 45%);
+
+  /* Tipografia */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 650;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+
+  /* Spaziature (scala da 4px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+
+  /* Forme ed elevazione */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 999px;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 6%);
+  --shadow-md: 0 4px 16px rgb(0 0 0 / 12%);
+  --border-width: 1px;
+  --focus-ring: 0 0 0 3px var(--color-surface), 0 0 0 5px var(--color-focus);
+
+  /* Layout e animazioni */
+  --container-max: 72rem;
+  --navbar-height: 3.5rem;
+  --control-height: 2.5rem;
+  --transition-fast: 120ms ease-out;
+  --z-toast: 1000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #161615;
+    --color-surface: #20201e;
+    --color-surface-muted: #2a2a28;
+    --color-border: #3a3a37;
+    --color-border-strong: #55554f;
+    --color-text: #ededea;
+    --color-text-muted: #a6a6a0;
+    --color-primary: #6f9fe6;
+    --color-primary-hover: #8ab1ec;
+    --color-primary-soft: #1f2c40;
+    --color-text-inverse: #10151d;
+    --color-success: #5cc28a;
+    --color-success-soft: #1b3326;
+    --color-warning: #e0b050;
+    --color-warning-soft: #3a2f17;
+    --color-danger: #f08a83;
+    --color-danger-hover: #f4a49e;
+    --color-danger-soft: #3d1f1d;
+    --color-info: #6f9fe6;
+    --color-info-soft: #1f2c40;
+    --color-focus: #8ab1ec;
+    --color-overlay: rgb(0 0 0 / 65%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+  }
+}

@@ -4,7 +4,7 @@
 > 
 > **Obiettivo**
 > Genera il codice per una landing page/sito vetrina per un [INSERIRE TIPO DI LOCALE: Pizzeria / Ristorante / Bar].
-> Utilizza il template [INSERIRE FRAMEWORK FRONTEND: es. React, Angular, TypeScript] per il frontend e il template [INSERIRE FRAMEWORK BACKEND: es. Nodejs, Python, C#] per il backend, includendo l'endpoint health di default.
+> Utilizza il template [INSERIRE FRAMEWORK FRONTEND: React, Angular, Flutter, C# (Blazor)] per il frontend e il template [INSERIRE FRAMEWORK BACKEND: Node.js, TypeScript, Python, Java, .NET] per il backend, includendo l'endpoint health di default. Rispetta il contratto API comune in `docs/api-contract.md` (rotte `/api/...`, errori Problem Details, variabili d'ambiente e porte) e mantieni la configurazione Docker del template.
 > 
 > 
 > **Requisiti di Design (Stile e UI)**
@@ -25,7 +25,7 @@
 > 2. **Hero Section:** Un titolo d'impatto, una breve descrizione dell'atmosfera del locale e una chiara Call to Action (es. "Prenota un tavolo" o "Guarda il menu").
 > 3. **Sezione Chi Siamo:** Breve paragrafo sulla filosofia del locale.
 > 4. **Menu in evidenza:** Una griglia o lista testuale semplice (recuperata dal file dati) con 4-6 piatti/drink iconici e i relativi prezzi.
-> 5. **Contatti e Footer:** Indirizzo, orari di apertura, numero di telefono, e uno status indicator minimale che fa una fetch all'endpoint "health" del backend per mostrare un piccolo pallino verde con scritto "Sistema Online" (dimostrazione tecnica di collegamento).
+> 5. **Contatti e Footer:** Indirizzo, orari di apertura, numero di telefono, e uno status indicator minimale che fa una fetch all'endpoint `GET /api/health` del backend (risposta `{ "status": "ok" }`) per mostrare un piccolo pallino verde con scritto "Sistema Online" (dimostrazione tecnica di collegamento).
 > 
 > 
 > 

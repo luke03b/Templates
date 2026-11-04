@@ -45,6 +45,13 @@ Produrre codice Angular pulito e modulare, con separazione rigorosa tra componen
 8. Scrivi test mirati.
    - Aggiungi component test, service test e test di routing o stato quando serve.
 
+## Convenzioni Angular 22 usate nel template
+
+- Nomi file e classi senza suffisso: `app.ts` con classe `App`, `home.ts` con classe `Home` (stile generato da `ng new` dalla v20 in poi).
+- Zoneless e `ChangeDetectionStrategy.OnPush` sono il default; stato con signals, control flow `@if`/`@for`, `inject()` al posto dei costruttori.
+- `provideHttpClient` usa già fetch: non aggiungere `withFetch()` (deprecato in v22).
+- Test con Vitest (`ng test`), UI con Angular Material e token in `src/styles.scss`.
+
 ## Best Practices
 
 - Mantieni il confine chiaro: componenti per UI, services per logica, state per dati condivisi, helpers per funzioni pure.

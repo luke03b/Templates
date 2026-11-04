@@ -1,0 +1,62 @@
+# .editorconfig: regole di formattazione e stile condivise da IDE e `dotnet format`.
+# Documentazione: https://learn.microsoft.com/dotnet/fundamentals/code-analysis/code-style-rule-options
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{json,xml,csproj,props,targets,slnx,razor,html,css,yml,yaml}]
+indent_size = 2
+
+[*.razor]
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.cs]
+# Namespace "file-scoped" (namespace X;) per ridurre l'indentazione.
+csharp_style_namespace_declarations = file_scoped:warning
+# using fuori dal namespace, System.* per primi.
+csharp_using_directive_placement = outside_namespace:warning
+dotnet_sort_system_directives_first = true
+# var ammesso quando il tipo è evidente.
+csharp_style_var_when_type_is_apparent = true:suggestion
+# Preferisci espressioni moderne.
+csharp_style_prefer_primary_constructors = true:suggestion
+dotnet_style_prefer_collection_expression = when_types_loosely_match:suggestion
+# Naming. La regola più specifica vince (const > static readonly > campo normale).
+# Costanti: PascalCase (convenzione ufficiale C#/.NET).
+dotnet_naming_rule.constants_pascal.symbols = constant_fields
+dotnet_naming_rule.constants_pascal.style = pascal
+dotnet_naming_rule.constants_pascal.severity = warning
+dotnet_naming_symbols.constant_fields.applicable_kinds = field
+dotnet_naming_symbols.constant_fields.applicable_accessibilities = *
+dotnet_naming_symbols.constant_fields.required_modifiers = const
+# Campi static readonly: PascalCase.
+dotnet_naming_rule.static_readonly_pascal.symbols = static_readonly_fields
+dotnet_naming_rule.static_readonly_pascal.style = pascal
+dotnet_naming_rule.static_readonly_pascal.severity = warning
+dotnet_naming_symbols.static_readonly_fields.applicable_kinds = field
+dotnet_naming_symbols.static_readonly_fields.applicable_accessibilities = *
+dotnet_naming_symbols.static_readonly_fields.required_modifiers = static, readonly
+dotnet_naming_style.pascal.capitalization = pascal_case
+# Campi privati di istanza con prefisso _ (convenzione .NET).
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel
+dotnet_naming_rule.private_fields_underscore.severity = warning
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.underscore_camel.required_prefix = _
+dotnet_naming_style.underscore_camel.capitalization = camel_case
+# using inutilizzati: errore in build (richiede GenerateDocumentationFile=true).
+dotnet_diagnostic.IDE0005.severity = warning
+
+[tests/**/*.cs]
+# Nei test i nomi dei metodi usano underscore (Metodo_Scenario_Risultato).
+dotnet_diagnostic.CA1707.severity = none

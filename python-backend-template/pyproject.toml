@@ -1,0 +1,76 @@
+# pyproject.toml: file unico di configurazione del progetto Python (PEP 621).
+# Contiene metadati, dipendenze runtime, dipendenze di sviluppo (PEP 735 "dependency groups")
+# e la configurazione dei tool (ruff, pytest, coverage, mypy).
+#
+# - Con uv:  `uv sync` legge questo file e il lockfile `uv.lock`.
+# - Con pip: usa `requirements.txt` / `requirements-dev.txt`, generati da questo file con
+#            `uv export` (vedi README, sezione "Comandi utili extra").
+
+[project]
+name = "python-backend-template"
+version = "1.0.0"
+description = "FastAPI backend template: health check and in-memory CRUD for items."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi==0.162.0",
+    "uvicorn[standard]==0.54.0",
+    "pydantic==2.14.2",
+    "pydantic-settings==2.16.2",
+]
+
+[dependency-groups]
+# Dipendenze solo per sviluppo/test: non finiscono nell'immagine Docker.
+dev = [
+    "pytest==9.2.0",
+    "pytest-cov==7.1.0",
+    # Client HTTP usato da TestClient (httpx2 è il successore ufficiale di httpx).
+    "httpx2==2.16.0",
+    "ruff==0.17.3",
+    "mypy==2.4.1",
+]
+
+[tool.uv]
+# Applicazione, non libreria: uv non deve "costruire" e installare il progetto come pacchetto.
+package = false
+
+# ---------------------------------------------------------------- ruff (lint + format)
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+# E/W pycodestyle, F pyflakes, I isort, B bugbear, UP pyupgrade, N pep8-naming,
+# SIM semplificazioni, C4 comprehension, RUF regole ruff, S bandit (sicurezza), PT pytest.
+select = ["E", "W", "F", "I", "B", "UP", "N", "SIM", "C4", "RUF", "S", "PT"]
+
+[tool.ruff.lint.per-file-ignores]
+# Nei test `assert` è il modo normale di verificare.
+"tests/**" = ["S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+# ---------------------------------------------------------------- pytest + coverage
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra --strict-markers"
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 90
+exclude_also = ["if __name__ == .__main__.:"]
+
+# ---------------------------------------------------------------- mypy (opzionale)
+[tool.mypy]
+python_version = "3.14"
+strict = true
+plugins = ["pydantic.mypy"]
+files = ["app", "tests"]

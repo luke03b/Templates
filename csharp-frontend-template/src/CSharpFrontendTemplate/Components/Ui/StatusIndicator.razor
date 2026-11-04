@@ -1,0 +1,25 @@
+@* StatusIndicator: pallino colorato + testo per lo stato di un servizio.
+   Presentazionale: riceve lo stato dal genitore, non fa chiamate HTTP. *@
+
+<span class="@UiCss.Join("status", $"status-{Status.ToString().ToLowerInvariant()}")" role="status" aria-live="polite">
+    <span class="status-dot" aria-hidden="true"></span>
+    <span>@Text</span>
+</span>
+
+@code {
+    public enum ServiceStatus
+    {
+        Checking,
+        Online,
+        Offline,
+    }
+
+    [Parameter] public ServiceStatus Status { get; set; } = ServiceStatus.Checking;
+
+    private string Text => Status switch
+    {
+        ServiceStatus.Online => "Online",
+        ServiceStatus.Offline => "Offline",
+        _ => "Checking...",
+    };
+}
